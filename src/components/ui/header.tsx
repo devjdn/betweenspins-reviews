@@ -1,0 +1,108 @@
+"use client";
+
+import Link from "next/link";
+import React from "react";
+import {
+    ArrowRightLeft,
+    CircleUserRound,
+    Disc3,
+    LogOut,
+    Settings,
+    User,
+} from "lucide-react";
+import { useUser, useAuth } from "@clerk/nextjs";
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuLabel,
+    DropdownMenuGroup,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+
+export default function Header() {
+    const { isSignedIn, user, isLoaded } = useUser();
+    const { signOut } = useAuth();
+
+    return (
+        <header className="z-10 h-14 flex items-center justify-between px-4 md:px-6">
+            <Link href={"/"}>
+                <div className="flex items-center gap-1">
+                    <Disc3 className="size-6" strokeWidth={1} />
+                    <span className="text-lg font-brand">Between Spins</span>
+                </div>
+            </Link>
+
+            <div>
+                {isLoaded && isSignedIn && user && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <div className="rounded-full hover:outline-4 transition-all cursor-pointer">
+                                <Avatar>
+                                    <AvatarFallback>
+                                        {user.firstName
+                                            ?.charAt(0)
+                                            .toUpperCase()}
+                                    </AvatarFallback>
+                                    <AvatarImage src={user.imageUrl} />
+                                </Avatar>
+                            </div>
+                        </DropdownMenuTrigger>
+
+                        <DropdownMenuContent
+                            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-2xl p-2 border-none bg-secondary/60 backdrop-blur-md"
+                            side={"bottom"}
+                            align="end"
+                            sideOffset={4}
+                        >
+                            <DropdownMenuLabel asChild>
+                                <div className="flex items-center gap-2 p-2 rounded-lg">
+                                    <Avatar>
+                                        <AvatarFallback>
+                                            {user.firstName
+                                                ?.charAt(0)
+                                                .toUpperCase()}
+                                        </AvatarFallback>
+                                        <AvatarImage src={user.imageUrl} />
+                                    </Avatar>
+                                    <span className="truncate text-muted-foreground font-">
+                                        {user.firstName}
+                                    </span>
+                                </div>
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuGroup className="">
+                                <DropdownMenuItem
+                                    className="rounded-lg"
+                                    asChild
+                                >
+                                    <Link href={"/profile"}>
+                                        <User />
+                                        Profile
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="rounded-lg">
+                                    <Settings />
+                                    Settings
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup>
+
+                            <DropdownMenuSeparator />
+
+                            <DropdownMenuItem
+                                className="rounded-lg"
+                                onClick={() => signOut()}
+                            >
+                                <LogOut />
+                                Sign Out
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
+            </div>
+        </header>
+    );
+}
