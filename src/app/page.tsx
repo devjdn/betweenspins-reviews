@@ -1,16 +1,24 @@
-import ShaderBackground from "@/components/gradients/mesh";
+import Background from "@/components/gradients/mesh";
 import { Button } from "@/components/ui/button";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
-    const { userId } = await auth();
+    const user = await currentUser();
     return (
         <div className="space-y-16">
-            <ShaderBackground />
-            {userId ? (
-                <></>
+            <Background />
+            {user ? (
+                <div className="w-11/12 mx-auto">
+                    <section>
+                        <div className="text-left space-y-4">
+                            <h1 className="font-sans font-semibold tracking-tight text-4xl md:text-text-5xl">
+                                Welcome back, {user.username}!
+                            </h1>
+                        </div>
+                    </section>
+                </div>
             ) : (
                 <section className="flex flex-col items-center gap-6">
                     <div className="space-y-4 text-center mx-auto">

@@ -10,6 +10,7 @@ import { ThemeProvider } from "next-themes";
 import Header from "@/components/ui/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
+import ConvexClientProvider from "./ConvexClientProvider";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -56,9 +57,11 @@ export default function RootLayout({
                 >
                     <ThemeProvider attribute={"class"} defaultTheme="dark">
                         <Header />
-                        <main className="px-4 py-8 md:py-12 xl:py-16">
-                            {children}
-                        </main>
+                        <ConvexClientProvider>
+                            <main className="px-4 py-8 md:py-12 xl:py-16">
+                                {children}
+                            </main>
+                        </ConvexClientProvider>
                     </ThemeProvider>
                 </body>
             </html>
