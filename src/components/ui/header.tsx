@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import React from "react";
-import { Disc3, LogOut, PenLine, Settings, UserRound } from "lucide-react";
+import {
+    Disc,
+    Disc3,
+    LogOut,
+    PenLine,
+    Settings,
+    UserRound,
+} from "lucide-react";
 import { useUser, useAuth } from "@clerk/nextjs";
 import {
     DropdownMenu,
@@ -15,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import BetweenSpinsLogo from "../logo";
 
 export default function Header() {
     const { isSignedIn, user, isLoaded } = useUser();
@@ -23,9 +31,11 @@ export default function Header() {
     return (
         <header className="z-10 h-14 flex items-center justify-between px-4 md:px-6">
             <Link href={"/"}>
-                <div className="flex items-center gap-1">
-                    <Disc3 className="size-6" strokeWidth={1} />
-                    <span className="text-lg font-brand">Between Spins</span>
+                <div className="flex items-center gap-0.5">
+                    <BetweenSpinsLogo size={30} />
+                    <span className="text-lg font-sans font-semibold tracking-[-0.075em]">
+                        Between Spins
+                    </span>
                 </div>
             </Link>
 
