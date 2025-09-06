@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import React from "react";
-import {
-    ArrowRightLeft,
-    CircleUserRound,
-    Disc3,
-    LogOut,
-    Settings,
-    User,
-} from "lucide-react";
+import { Disc3, LogOut, PenLine, Settings, UserRound } from "lucide-react";
 import { useUser, useAuth } from "@clerk/nextjs";
 import {
     DropdownMenu,
@@ -53,7 +46,7 @@ export default function Header() {
                         </DropdownMenuTrigger>
 
                         <DropdownMenuContent
-                            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-2xl p-2 border-none bg-secondary/60 backdrop-blur-md"
+                            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-2xl p-2 border-none bg-secondary/30 backdrop-blur-md"
                             side={"bottom"}
                             align="end"
                             sideOffset={4}
@@ -68,23 +61,37 @@ export default function Header() {
                                         </AvatarFallback>
                                         <AvatarImage src={user.imageUrl} />
                                     </Avatar>
-                                    <span className="truncate text-muted-foreground font-">
-                                        {user.firstName}
-                                    </span>
+                                    <div className="leading-tight">
+                                        <p className="truncate text-xs text-muted-foreground font-medium">
+                                            Signed in as
+                                        </p>
+                                        <p className="truncate text-foreground font-semibold">
+                                            {user.firstName}
+                                        </p>
+                                    </div>
                                 </div>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuGroup className="">
+                            <DropdownMenuGroup className="font-medium">
                                 <DropdownMenuItem
-                                    className="rounded-lg"
+                                    className="rounded-lg focus:bg-accent/60"
                                     asChild
                                 >
                                     <Link href={"/profile"}>
-                                        <User />
-                                        Profile
+                                        <UserRound />
+                                        View Profile
                                     </Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="rounded-lg">
+                                <DropdownMenuItem
+                                    className="rounded-lg focus:bg-accent/60"
+                                    asChild
+                                >
+                                    <Link href={"/profile"}>
+                                        <PenLine />
+                                        Edit Profile
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="rounded-lg focus:bg-accent/60">
                                     <Settings />
                                     Settings
                                 </DropdownMenuItem>
@@ -93,7 +100,7 @@ export default function Header() {
                             <DropdownMenuSeparator />
 
                             <DropdownMenuItem
-                                className="rounded-lg"
+                                className="rounded-lg font-medium focus:bg-accent/60"
                                 onClick={() => signOut()}
                             >
                                 <LogOut />

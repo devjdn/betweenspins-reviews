@@ -58,7 +58,7 @@ export default function RootLayout({
                     <ThemeProvider attribute={"class"} defaultTheme="dark">
                         <Header />
                         <ConvexClientProvider>
-                            <main className="px-4 py-8 md:py-12 xl:py-16">
+                            <main className="px-4 py-12 lg:py-24 2xl:py-36">
                                 {children}
                             </main>
                         </ConvexClientProvider>

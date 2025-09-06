@@ -68,3 +68,28 @@ export const getByClerkId = query({
         };
     },
 });
+
+export const updateBio = mutation({
+    args: {
+        clerkUserId: v.string(),
+        bio: v.string(),
+    },
+    handler: async (ctx, { clerkUserId, bio }) => {
+        const user = await ctx.db
+            .query("users")
+            .withIndex("by_clerkUserId", (q) =>
+                q.eq("clerkUserId", clerkUserId)
+            )
+            .unique();
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        await ctx.db.patch(user._id, {
+            bio,
+        });
+
+        return { success: true };
+    },
+});

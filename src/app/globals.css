@@ -119,6 +119,6 @@
         @apply border-border outline-ring/50;
     }
     body {
-        @apply font-sans bg-background text-foreground selection:bg-primary selection:text-primary-foreground;
+        @apply font-sans bg-background text-foreground selection:bg-secondary/90 selection:text-secondary-foreground;
     }
 }

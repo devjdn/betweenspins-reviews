@@ -1,20 +1,25 @@
 import Background from "@/components/gradients/mesh";
 import { Button } from "@/components/ui/button";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import Image from "next/image";
+import { currentUser } from "@clerk/nextjs/server";
+// import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
     const user = await currentUser();
+
     return (
         <div className="space-y-16">
             <Background />
+
             {user ? (
                 <div className="w-11/12 mx-auto">
                     <section>
                         <div className="text-left space-y-4">
-                            <h1 className="font-sans font-semibold tracking-tight text-4xl md:text-text-5xl">
-                                Welcome back, {user.username}!
+                            <h1 className="font-sans font-semibold tracking-tight text-3xl sm:text-4xl md:text-text-5xl">
+                                <span className="text-foreground/80">
+                                    Welcome back,
+                                </span>{" "}
+                                {user.username}!
                             </h1>
                         </div>
                     </section>
