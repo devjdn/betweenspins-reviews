@@ -43,7 +43,10 @@ export default function Header() {
                 {isLoaded && isSignedIn && user && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <div className="rounded-full hover:outline-4 transition-all cursor-pointer">
+                            <button
+                                type="button"
+                                className="rounded-full hover:outline-4 transition-all cursor-pointer"
+                            >
                                 <Avatar>
                                     <AvatarFallback>
                                         {user.firstName
@@ -52,7 +55,7 @@ export default function Header() {
                                     </AvatarFallback>
                                     <AvatarImage src={user.imageUrl} />
                                 </Avatar>
-                            </div>
+                            </button>
                         </DropdownMenuTrigger>
 
                         <DropdownMenuContent

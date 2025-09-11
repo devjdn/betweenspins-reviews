@@ -7,11 +7,11 @@ interface CircularCharacterCounterProps {
 export function CircularCharacterCounter({
     current,
     max,
-    size = 60,
+    size = 32, // smaller default
 }: CircularCharacterCounterProps) {
     const percentage = Math.min((current / max) * 100, 100);
     const remaining = Math.max(max - current, 0);
-    const radius = (size - 8) / 2;
+    const radius = (size - 4) / 2; // thinner margin
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
@@ -30,7 +30,7 @@ export function CircularCharacterCounter({
                     cy={size / 2}
                     r={radius}
                     stroke="currentColor"
-                    strokeWidth="4"
+                    strokeWidth="3"
                     fill="transparent"
                     className="text-muted-foreground/20"
                 />
@@ -40,7 +40,7 @@ export function CircularCharacterCounter({
                     cy={size / 2}
                     r={radius}
                     stroke="currentColor"
-                    strokeWidth="4"
+                    strokeWidth="3"
                     fill="transparent"
                     strokeDasharray={circumference}
                     strokeDashoffset={strokeDashoffset}
@@ -49,7 +49,7 @@ export function CircularCharacterCounter({
                 />
             </svg>
             {/* Center text showing remaining characters */}
-            <div className="absolute inset-0 flex items-center justify-center text-sm font-medium text-muted-foreground">
+            <div className="absolute inset-0 flex items-center justify-center text-[10px] font-medium text-muted-foreground tabular-nums">
                 {remaining}
             </div>
         </div>

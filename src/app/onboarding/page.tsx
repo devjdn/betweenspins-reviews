@@ -8,11 +8,10 @@ export default async function OnboardingPage() {
 
     if (userId) {
         return (
-            <div className="space-y-16">
+            <div className="space-y-16 grid place-items-center w-full">
                 <Background />
-                <div className="max-w-prose mx-auto">
-                    <OnboardingFlow clerkUserId={userId} />
-                </div>
+
+                <OnboardingFlow clerkUserId={userId} />
             </div>
         );
     } else {

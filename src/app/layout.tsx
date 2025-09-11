@@ -53,12 +53,12 @@ export default function RootLayout({
         >
             <html lang="en" suppressHydrationWarning>
                 <body
-                    className={`${inter.variable} ${dm_serif.variable} ${instrument_serif.variable} ${geistMono.variable} antialiased`}
+                    className={`${inter.variable} ${dm_serif.variable} ${instrument_serif.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
                 >
                     <ThemeProvider attribute={"class"} defaultTheme="dark">
                         <Header />
                         <ConvexClientProvider>
-                            <main className="px-4 py-12 lg:py-24 2xl:py-36">
+                            <main className="flex flex-col flex-1 px-4 py-12 lg:py-24 2xl:py-36">
                                 {children}
                             </main>
                         </ConvexClientProvider>
