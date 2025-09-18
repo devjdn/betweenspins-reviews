@@ -10,13 +10,11 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Loader2, FastForward, Play, Rewind } from "lucide-react";
 import { CircularCharacterCounter } from "../char-counter";
 import { motion } from "motion/react";
+import StepHeader from "./step-header";
 
 const bioSchema = z.object({
     bio: z
@@ -28,23 +26,25 @@ const bioSchema = z.object({
 
 type BioFormData = z.infer<typeof bioSchema>;
 
-type BioStepProps = {
-    onComplete: (bio: string) => void;
-    isLoading: boolean;
-    skipStep: () => void;
-    prevStep: () => void;
+export type BioStepHandle = {
+    submit: () => void;
+    canSubmit: boolean;
 };
 
-export default function BioStep({
-    onComplete,
-    isLoading,
-    skipStep,
-    prevStep,
-}: BioStepProps) {
+type BioStepProps = {
+    onComplete: (bio: string) => void;
+    onValidityChange?: (isValid: boolean) => void;
+};
+
+const BioStep = React.forwardRef<BioStepHandle, BioStepProps>(function BioStep(
+    { onComplete, onValidityChange }: BioStepProps,
+    ref
+) {
     const [charCount, setCharCount] = React.useState<number>(0);
 
     const form = useForm<BioFormData>({
         resolver: zodResolver(bioSchema),
+        mode: "onChange",
         defaultValues: {
             bio: "",
         },
@@ -53,6 +53,25 @@ export default function BioStep({
     const handleSubmit = (data: BioFormData) => {
         onComplete(data.bio);
     };
+
+    React.useImperativeHandle(
+        ref,
+        () => ({
+            submit: () => {
+                // Trigger form submission programmatically
+                form.handleSubmit(handleSubmit)();
+            },
+            get canSubmit() {
+                return form.formState.isValid && !form.formState.isSubmitting;
+            },
+        }),
+        [form]
+    );
+
+    React.useEffect(() => {
+        onValidityChange?.(form.formState.isValid);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [form.formState.isValid]);
 
     return (
         <motion.div
@@ -63,15 +82,12 @@ export default function BioStep({
             transition={{ duration: 0.4, ease: "easeInOut" }}
             key={"bio"}
         >
-            <header className="space-y-2">
-                <h1 className="font-semibold tracking-tight text-xl md:text-2xl">
-                    A Personal Touch
-                </h1>
-                <p className="text-sm text-muted-foreground leading-snug max-w-prose">
-                    Tell others a little something about yourself, or the music
-                    you like to listen to.
-                </p>
-            </header>
+            <StepHeader
+                title={"A Personal Touch"}
+                description={
+                    "Tell others a little something about yourself, or the music you like to listen to."
+                }
+            />
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(handleSubmit)}
@@ -99,7 +115,7 @@ export default function BioStep({
                                             maxLength={240}
                                         />
                                     </FormControl>
-                                    <div className="flex justify-between items-center text-sm place-self-end">
+                                    <div className="flex justify-between items-center text-sm">
                                         <FormMessage />
                                         <CircularCharacterCounter
                                             current={charCount}
@@ -112,34 +128,8 @@ export default function BioStep({
                     />
                 </form>
             </Form>
-            <div className="grid grid-rows-3 md:grid-rows-1 md:grid-cols-3 gap-x-4 gap-y-2">
-                <Button variant={"secondary"} size={"lg"} onClick={prevStep}>
-                    <Rewind className="fill-secondary-foreground stroke-none" />
-                    Back
-                </Button>
-                <Button
-                    form="bio-form"
-                    type="submit"
-                    size={"lg"}
-                    disabled={isLoading || !form.formState.isValid}
-                >
-                    {isLoading ? (
-                        <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Updating...
-                        </>
-                    ) : (
-                        <>
-                            <Play className="fill-primary-foreground stroke-none" />
-                            Continue
-                        </>
-                    )}
-                </Button>
-                <Button variant={"secondary"} size={"lg"} onClick={skipStep}>
-                    <FastForward className="fill-secondary-foreground stroke-none" />
-                    Skip
-                </Button>
-            </div>
         </motion.div>
     );
-}
+});
+
+export default BioStep;

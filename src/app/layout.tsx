@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import {
-    Inter,
     Geist_Mono,
     DM_Serif_Display,
     Instrument_Serif,
+    Instrument_Sans,
 } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
@@ -12,8 +12,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
 import ConvexClientProvider from "./ConvexClientProvider";
 
-const inter = Inter({
-    variable: "--font-inter",
+const instrument_sans = Instrument_Sans({
+    variable: "--font-instrument-sans",
     subsets: ["latin"],
 });
 
@@ -53,9 +53,13 @@ export default function RootLayout({
         >
             <html lang="en" suppressHydrationWarning>
                 <body
-                    className={`${inter.variable} ${dm_serif.variable} ${instrument_serif.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+                    className={`${instrument_sans.variable} ${dm_serif.variable} ${instrument_serif.variable} ${geistMono.variable} antialiased flex flex-col min-h-dvh`}
                 >
-                    <ThemeProvider attribute={"class"} defaultTheme="dark">
+                    <ThemeProvider
+                        attribute={"class"}
+                        forcedTheme="dark"
+                        defaultTheme="dark"
+                    >
                         <Header />
                         <ConvexClientProvider>
                             <main className="flex flex-col flex-1 px-4 py-12 lg:py-24 2xl:py-36">

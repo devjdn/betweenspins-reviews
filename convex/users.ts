@@ -93,3 +93,33 @@ export const updateBio = mutation({
         return { success: true };
     },
 });
+
+export const updateFavoriteArtists = mutation({
+    args: {
+        clerkUserId: v.string(),
+        favoriteArtists: v.array(
+            v.object({
+                artist_id: v.string(),
+                name: v.string(),
+            })
+        ),
+    },
+    handler: async (ctx, { clerkUserId, favoriteArtists }) => {
+        const user = await ctx.db
+            .query("users")
+            .withIndex("by_clerkUserId", (q) =>
+                q.eq("clerkUserId", clerkUserId)
+            )
+            .unique();
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        await ctx.db.patch(user._id, {
+            favoriteArtists,
+        });
+
+        return { success: true };
+    },
+});

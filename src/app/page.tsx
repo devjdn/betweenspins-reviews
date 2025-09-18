@@ -14,7 +14,7 @@ export default async function Home() {
             {user ? (
                 <div className="w-11/12 mx-auto">
                     <section>
-                        <div className="text-left space-y-4">
+                        <div className="space-y-4 text-left">
                             <h1 className="font-sans font-semibold tracking-tight text-3xl sm:text-4xl md:text-text-5xl">
                                 <span className="text-foreground/80">
                                     Welcome back,
