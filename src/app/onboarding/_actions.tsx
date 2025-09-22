@@ -3,6 +3,7 @@
 import { api } from "../../../convex/_generated/api";
 import { fetchMutation } from "convex/nextjs";
 import { clerkClient } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export const addBioFromOnboarding = async (
     clerkUserId: string,

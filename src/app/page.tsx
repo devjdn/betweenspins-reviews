@@ -1,11 +1,21 @@
 import Background from "@/components/gradients/mesh";
 import { Button } from "@/components/ui/button";
 import { currentUser } from "@clerk/nextjs/server";
-// import Image from "next/image";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export default async function Home() {
-    const user = await currentUser();
+    let user = null;
+
+    try {
+        user = await currentUser();
+    } catch (err: any) {
+        // If Clerk says "Not Found" (account deleted), redirect them
+        if (err?.status === 404 || err?.message?.includes("Not Found")) {
+            redirect("/sign-up");
+        }
+        throw err; // rethrow anything else
+    }
 
     return (
         <div className="space-y-16">
@@ -36,11 +46,11 @@ export default async function Home() {
                         </p>
                     </div>
                     <div className="flex flex-row gap-2">
-                        <Button variant={"default"} size={"lg"} asChild>
-                            <Link href={"/sign-up"}>{"Get Started"}</Link>
+                        <Button variant="default" size="lg" asChild>
+                            <Link href="/sign-up">Get Started</Link>
                         </Button>
-                        <Button variant={"outline"} size={"lg"} asChild>
-                            <Link href={"/sign-in"}>{"Continue"}</Link>
+                        <Button variant="outline" size="lg" asChild>
+                            <Link href="/sign-in">Continue</Link>
                         </Button>
                     </div>
                 </section>
