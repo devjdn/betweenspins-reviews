@@ -62,7 +62,7 @@ export default function RootLayout({
                     >
                         <Header />
                         <ConvexClientProvider>
-                            <main className="flex flex-col flex-1 px-4 py-12 lg:py-24">
+                            <main className="flex flex-col flex-1 px-4 md:px-6 py-12 lg:py-24">
                                 {children}
                             </main>
                         </ConvexClientProvider>

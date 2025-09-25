@@ -59,7 +59,7 @@ export default function Header() {
                         </DropdownMenuTrigger>
 
                         <DropdownMenuContent
-                            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-2xl p-2 border-none bg-secondary/30 backdrop-blur-md"
+                            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-2xl p-2 border-none bg-secondary/80 backdrop-blur-md"
                             side={"bottom"}
                             align="end"
                             sideOffset={4}
@@ -86,7 +86,7 @@ export default function Header() {
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup className="font-medium">
-                                <DropdownMenuItem
+                                {/* <DropdownMenuItem
                                     className="rounded-lg focus:bg-accent/60"
                                     asChild
                                 >
@@ -103,7 +103,7 @@ export default function Header() {
                                         <PenLine />
                                         Edit Profile
                                     </Link>
-                                </DropdownMenuItem>
+                                </DropdownMenuItem> */}
                                 <DropdownMenuItem className="rounded-lg focus:bg-accent/60">
                                     <Settings />
                                     Settings
@@ -115,6 +115,7 @@ export default function Header() {
                             <DropdownMenuItem
                                 className="rounded-lg font-medium focus:bg-accent/60"
                                 onClick={() => signOut()}
+                                variant="destructive"
                             >
                                 <LogOut />
                                 Sign Out

@@ -82,7 +82,7 @@ export class SpotifyAPI {
         const data: SpotifyTokenResponse = await res.json();
 
         this.cachedToken = data.access_token;
-        this.tokenExpiry = now + (data.expires_in - 60) * 1000; // 60 second buffer
+        this.tokenExpiry = now + (data.expires_in - 120) * 1000; // 2 min buffer before refreshing the token
 
         return this.cachedToken;
     }
@@ -91,13 +91,24 @@ export class SpotifyAPI {
      * Make authenticated request to Spotify API
      */
     private static async makeRequest<T>(endpoint: string): Promise<T> {
-        const token = await this.getToken();
+        let token = await this.getToken();
         const url = `${this.BASE_URL}${endpoint}`;
 
-        const res = await fetch(url, {
+        let res = await fetch(url, {
             headers: { Authorization: `Bearer ${token}` },
             cache: "no-store",
         });
+
+        if (res.status === 401) {
+            // Force refresh token and retry once
+            this.cachedToken = null;
+            token = await this.getToken();
+
+            res = await fetch(url, {
+                headers: { Authorization: `Bearer ${token}` },
+                cache: "no-store",
+            });
+        }
 
         if (!res.ok) {
             const errorText = await res.text();

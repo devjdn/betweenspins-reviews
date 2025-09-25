@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { CalendarDaysIcon } from "lucide-react";
+import { CalendarDaysIcon, Music2, Pencil, User } from "lucide-react";
 import Image from "next/image";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/../convex/_generated/api";
@@ -8,10 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import UserBio from "@/components/ui/profile/bio";
 import { formatFollowers, SpotifyAPI } from "@/lib/spotify";
 import { SpotifyArtist } from "@/types/spotify";
+import { Button } from "@/components/ui/button";
 
 export default async function ProfilePage() {
-    const { userId, redirectToSignIn } = await auth();
-    if (!userId) return redirectToSignIn();
+    const { redirectToSignIn } = await auth();
 
     const user = await currentUser();
     const userData = await fetchQuery(api.users.getByClerkId, {
@@ -32,83 +32,99 @@ export default async function ProfilePage() {
 
     console.log(favouriteArtists);
 
-    return (
-        <div className="space-y-8 w-full max-w-6xl mx-auto">
-            <header className="flex flex-col md:grid md:grid-cols-[auto_1fr] items-center gap-6 md:gap-8">
-                <div className="relative w-32 md:w-3xs rounded-full border overflow-hidden aspect-square bg-secondary/60 backdrop-blur-md">
-                    {user?.imageUrl && (
-                        <Image
-                            src={user.imageUrl}
-                            alt={`${user.username}'s Profile Picture`}
-                            fill
-                            priority
-                        />
-                    )}
-                </div>
+    if (user) {
+        return (
+            <div className="space-y-8 max-w-5xl w-full mx-auto">
+                <header className="space-y-12">
+                    <div className="flex flex-col items-center md:flex-row gap-4 md:gap-6 md:items-end">
+                        <div className="relative rounded-full aspect-square overflow-hidden border w-32 md:w-48 shadow-xl">
+                            <Image
+                                src={user.imageUrl}
+                                alt={`${user.username}'s Profile Picture`}
+                                className="object-cover"
+                                fill
+                                priority
+                            />
+                        </div>
 
-                <div className="flex flex-col gap-4 items-center md:items-start md:justify-between">
-                    <h1 className="font-semibold tracking-tight text-xl md:text-3xl">
-                        {user?.username}
-                    </h1>
+                        <div className="flex flex-col gap-y-4 items-center md:items-start">
+                            <div className="md:space-y-1 font-semibold text-center md:text-left tracking-tight">
+                                <h1 className=" text-xl md:text-3xl">
+                                    {user.fullName ?? user.username}
+                                </h1>
+                                <p className="text-muted-foreground text-lg">{`@${user.username}`}</p>
+                            </div>
 
-                    <div className="space-y-4">
-                        <Badge variant={"secondary"}>
-                            <CalendarDaysIcon />
-                            Joined{" "}
-                            {user?.createdAt
-                                ? new Date(user.createdAt).toLocaleDateString(
-                                      "en-US",
-                                      {
-                                          year: "numeric",
-                                          month: "long",
-                                          day: "numeric",
-                                      }
-                                  )
-                                : ""}
-                        </Badge>
+                            <Button size={"sm"}>
+                                <Pencil />
+                                Edit Profile
+                            </Button>
+                        </div>
                     </div>
-
-                    {userData && <UserBio bio={userData.bio} />}
-                </div>
-            </header>
-
-            <Separator />
-
-            <section className="space-y-4">
-                <div className="md:pl-4">
-                    <h2 className="font-semibold tracking-tight text-xl sm:text-2xl md:text-text-3xl">
-                        Favourite Artists
-                    </h2>
-                </div>
-
-                <div className="flex overflow-x-auto gap-6 md:gap-0 md:grid md:grid-cols-5 md:overflow-visible md:pb-0 snap-x snap-mandatory">
-                    {favouriteArtists.length > 0 &&
-                        favouriteArtists.map((artist, i) => (
-                            <div
-                                key={i}
-                                className="flex-shrink-0 w-32 py-4 md:px-4 md:w-auto space-y-2 snap-start rounded-2xl md:hover:bg-secondary transition-colors duration-200"
-                            >
-                                <div className="relative aspect-square rounded-md md:rounded-lg overflow-hidden">
-                                    <Image
-                                        src={artist.images[0].url}
-                                        alt={artist.name}
-                                        fill
-                                        loading="lazy"
-                                        className="object-cover"
-                                    />
-                                </div>
-                                <div className="leading-snug text-xs md:text-sm text-left">
-                                    <p className="truncate">{artist.name}</p>
-                                    <p className="text-muted-foreground/80">
-                                        {`${formatFollowers(
-                                            artist.followers.total
-                                        )} followers`}
+                    {userData && (
+                        <div className="rounded-2xl bg-card p-4 md:p-8 space-y-12">
+                            {userData.bio && (
+                                <div className="text-sm space-y-1">
+                                    <h3 className="font-medium md:text-lg">
+                                        About
+                                    </h3>
+                                    <p className="text-muted-foreground">
+                                        {userData.bio}
                                     </p>
                                 </div>
-                            </div>
-                        ))}
-                </div>
-            </section>
-        </div>
-    );
+                            )}
+                            {favouriteArtists &&
+                                favouriteArtists.length > 0 && (
+                                    <div className="text-sm space-y-4">
+                                        <h3 className="font-medium md:text-lg">
+                                            Favourite Artists
+                                        </h3>
+                                        <div className="flex overflow-x-scroll snap-x snap-mandatory gap-4 md:gap-8 md:grid md:grid-cols-5">
+                                            {favouriteArtists.map(
+                                                (artist, i) => (
+                                                    <div
+                                                        className="snap-start space-y-2"
+                                                        key={i}
+                                                    >
+                                                        <div className="w-32 md:w-auto relative overflow-hidden rounded-full border aspect-square bg-secondary grid">
+                                                            {artist.images[0]
+                                                                .url ? (
+                                                                <Image
+                                                                    src={
+                                                                        artist
+                                                                            .images[0]
+                                                                            .url
+                                                                    }
+                                                                    alt={`${artist.name}'s Spotify Profile Picture`}
+                                                                    fill
+                                                                    loading="lazy"
+                                                                    className="object-cover"
+                                                                />
+                                                            ) : (
+                                                                <Music2 className="size-4 place-self-center" />
+                                                            )}
+                                                        </div>
+                                                        <div className="text-center text-xs md:text-sm">
+                                                            <p className="line-clamp-2">
+                                                                {artist.name}
+                                                            </p>
+                                                            <p className="text-muted-foreground">{`${formatFollowers(
+                                                                artist.followers
+                                                                    .total
+                                                            )} Followers`}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                        </div>
+                    )}
+                </header>
+            </div>
+        );
+    } else {
+        redirectToSignIn();
+    }
 }
