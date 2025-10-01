@@ -63,3 +63,37 @@ export interface SpotifySearchResponse {
     };
     // tracks, playlists, etc. can also be included
 }
+
+export interface SpotifyTrack {
+    id: string;
+    name: string;
+    artists: SpotifyArtist[];
+    available_markets: string[];
+    disc_number: number;
+    duration_ms: number;
+    explicit: boolean;
+    external_urls: {
+        spotify: string;
+    };
+    href: string;
+    is_playable?: boolean;
+    linked_from?: {
+        id: string;
+        href: string;
+        uri: string;
+    };
+    preview_url: string | null;
+    track_number: number;
+    type: "track";
+    uri: string;
+}
+
+export interface SpotifyAlbumTracks {
+    href: string;
+    items: SpotifyTrack[];
+    limit: number;
+    next: string | null;
+    offset: number;
+    previous: string | null;
+    total: number;
+}

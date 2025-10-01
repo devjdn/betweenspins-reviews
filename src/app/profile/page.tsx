@@ -9,6 +9,7 @@ import UserBio from "@/components/ui/profile/bio";
 import { formatFollowers, SpotifyAPI } from "@/lib/spotify";
 import { SpotifyArtist } from "@/types/spotify";
 import { Button } from "@/components/ui/button";
+import ArtistColorsBackground from "@/components/gradients/colorthief-gradient";
 
 export default async function ProfilePage() {
     const { redirectToSignIn } = await auth();
@@ -30,11 +31,14 @@ export default async function ProfilePage() {
         }
     }
 
-    console.log(favouriteArtists);
+    const artistImgs = favouriteArtists
+        .map((artist) => artist.images?.[0]?.url)
+        .filter(Boolean) as string[];
 
     if (user) {
         return (
-            <div className="space-y-8 max-w-5xl w-full mx-auto">
+            <div className="space-y-8 max-w-5xl w-full mx-auto pt-24 md:pt-32 px-4 md:px-8">
+                <ArtistColorsBackground imageSrcs={artistImgs} />
                 <header className="space-y-12">
                     <div className="flex flex-col items-center md:flex-row gap-4 md:gap-6 md:items-end">
                         <div className="relative rounded-full aspect-square overflow-hidden border w-32 md:w-48 shadow-xl">
@@ -62,7 +66,7 @@ export default async function ProfilePage() {
                         </div>
                     </div>
                     {userData && (
-                        <div className="rounded-2xl bg-card p-4 md:p-8 space-y-12">
+                        <div className="space-y-12">
                             {userData.bio && (
                                 <div className="text-sm space-y-1">
                                     <h3 className="font-medium md:text-lg">
@@ -75,7 +79,7 @@ export default async function ProfilePage() {
                             )}
                             {favouriteArtists &&
                                 favouriteArtists.length > 0 && (
-                                    <div className="text-sm space-y-4">
+                                    <div className="text-sm space-y-4 p-4 md:p-8 rounded-lg md:rounded-2xl bg-card/40 backdrop-blur-2xl backdrop-saturate-100">
                                         <h3 className="font-medium md:text-lg">
                                             Favourite Artists
                                         </h3>
@@ -86,7 +90,7 @@ export default async function ProfilePage() {
                                                         className="snap-start space-y-2"
                                                         key={i}
                                                     >
-                                                        <div className="w-32 md:w-auto relative overflow-hidden rounded-full border aspect-square bg-secondary grid">
+                                                        <div className="w-32 md:w-auto relative overflow-hidden rounded-full aspect-square bg-secondary grid">
                                                             {artist.images[0]
                                                                 .url ? (
                                                                 <Image

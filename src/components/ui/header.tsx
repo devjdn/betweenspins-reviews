@@ -29,7 +29,7 @@ export default function Header() {
     const { signOut } = useAuth();
 
     return (
-        <header className="z-10 h-14 flex items-center justify-between px-4 md:px-6">
+        <header className="absolute w-full z-10 h-14 flex items-center justify-between px-4 md:px-6">
             <Link href={"/"}>
                 <div className="flex items-center gap-0.5">
                     <BetweenSpinsLogo size={30} />
@@ -86,7 +86,7 @@ export default function Header() {
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup className="font-medium">
-                                {/* <DropdownMenuItem
+                                <DropdownMenuItem
                                     className="rounded-lg focus:bg-accent/60"
                                     asChild
                                 >
@@ -95,15 +95,6 @@ export default function Header() {
                                         View Profile
                                     </Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="rounded-lg focus:bg-accent/60"
-                                    asChild
-                                >
-                                    <Link href={"/profile"}>
-                                        <PenLine />
-                                        Edit Profile
-                                    </Link>
-                                </DropdownMenuItem> */}
                                 <DropdownMenuItem className="rounded-lg focus:bg-accent/60">
                                     <Settings />
                                     Settings

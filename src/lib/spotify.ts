@@ -3,6 +3,7 @@ import {
     SpotifyArtist,
     SpotifyAlbum,
     SpotifySearchResponse,
+    SpotifyAlbumTracks,
 } from "@/types/spotify";
 
 export function formatFollowers(count: number) {
@@ -342,10 +343,10 @@ export class SpotifyAPI {
         limit: number = 50,
         offset: number = 0
     ) {
-        const data = await this.makeRequest<{ items: any[] }>(
+        const data = await this.makeRequest<SpotifyAlbumTracks>(
             `/albums/${albumId}/tracks?limit=${limit}&offset=${offset}`
         );
 
-        return data.items;
+        return data;
     }
 }

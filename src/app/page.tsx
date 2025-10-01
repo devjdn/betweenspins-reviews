@@ -18,7 +18,7 @@ export default async function Home() {
     }
 
     return user ? (
-        <div className="space-y-16">
+        <div className="space-y-16 pt-24 md:pt-32 px-4 md:px-8">
             <section>
                 <div className="space-y-4 text-center">
                     <h1 className="font-sans font-semibold tracking-tight text-xl sm:text-4xl md:text-text-5xl">
@@ -31,7 +31,7 @@ export default async function Home() {
             </section>
         </div>
     ) : (
-        <div className="space-y-16">
+        <div className="space-y-16 pt-24 md:pt-32 px-4 md:px-8">
             <section className="flex flex-col items-center gap-6">
                 <div className="space-y-4 text-center mx-auto">
                     <h1 className="font-serif text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl">

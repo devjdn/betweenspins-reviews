@@ -9,7 +9,7 @@ export default async function OnboardingPage() {
     if (userId) {
         return (
             <ReactQueryProvider>
-                <div className="space-y-16 grid flex-1 md:place-items-center w-full">
+                <div className="space-y-16 grid flex-1 md:place-items-center w-full pt-16 px-4 md:px-8">
                     {/* <Background /> */}
 
                     <OnboardingFlow clerkUserId={userId} />

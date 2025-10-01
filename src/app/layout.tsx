@@ -6,11 +6,11 @@ import {
     Instrument_Sans,
 } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "next-themes";
 import Header from "@/components/ui/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
 import ConvexClientProvider from "./ConvexClientProvider";
+import Footer from "@/components/ui/footer";
 
 const instrument_sans = Instrument_Sans({
     variable: "--font-instrument-sans",
@@ -55,18 +55,13 @@ export default function RootLayout({
                 <body
                     className={`${instrument_sans.variable} ${dm_serif.variable} ${instrument_serif.variable} ${geistMono.variable} antialiased flex flex-col min-h-dvh`}
                 >
-                    <ThemeProvider
-                        attribute={"class"}
-                        forcedTheme="dark"
-                        defaultTheme="dark"
-                    >
-                        <Header />
-                        <ConvexClientProvider>
-                            <main className="flex flex-col flex-1 px-4 md:px-6 py-12 lg:py-24">
-                                {children}
-                            </main>
-                        </ConvexClientProvider>
-                    </ThemeProvider>
+                    <Header />
+                    <ConvexClientProvider>
+                        <main className="flex flex-col flex-1 pb-8 relative">
+                            {children}
+                        </main>
+                    </ConvexClientProvider>
+                    <Footer />
                 </body>
             </html>
         </ClerkProvider>
