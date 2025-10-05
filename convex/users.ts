@@ -1,4 +1,3 @@
-// convex/users.ts
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -59,7 +58,7 @@ export const getByClerkId = query({
             )
             .unique();
 
-        if (!user) return null; // No user found
+        if (!user) return null;
 
         return {
             bio: user.bio ?? "",

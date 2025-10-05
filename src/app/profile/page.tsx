@@ -38,7 +38,7 @@ export default async function ProfilePage() {
     if (user) {
         return (
             <div className="space-y-8 max-w-5xl w-full mx-auto pt-24 md:pt-32 px-4 md:px-8">
-                <ArtistColorsBackground imageSrcs={artistImgs} />
+                {/* <ArtistColorsBackground imageSrcs={artistImgs} /> */}
                 <header className="space-y-12">
                     <div className="flex flex-col items-center md:flex-row gap-4 md:gap-6 md:items-end">
                         <div className="relative rounded-full aspect-square overflow-hidden border w-32 md:w-48 shadow-xl">

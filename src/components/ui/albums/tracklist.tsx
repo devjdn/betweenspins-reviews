@@ -17,7 +17,7 @@ export default function Tracklist({ tracks }: { tracks: SpotifyAlbumTracks }) {
                 {albumTracks.map((track, i) => (
                     <div
                         key={i}
-                        className="grid grid-cols-[40px_1fr] md:grid-cols-[40px_1fr_1fr] text-sm text-muted-foreground hover:text-foreground p-4 rounded-md md:rounded-lg odd:bg-secondary hover:bg-muted"
+                        className="grid grid-cols-[40px_1fr] md:grid-cols-[40px_1fr_1fr] text-sm text-muted-foreground hover:text-foreground p-4 rounded-md md:rounded-lg odd:bg-muted hover:bg-secondary"
                     >
                         <span className="">{track.track_number}</span>
                         <span>{track.name}</span>

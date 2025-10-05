@@ -3,7 +3,7 @@ import BetweenSpinsLogo from "../logo";
 
 export default function Footer() {
     return (
-        <footer className="bg-secondary border-t px-4 md:px-6 py-4 space-y-8">
+        <footer className="bg-muted border-t px-4 md:px-6 pt-4 pb-12 space-y-8">
             <div className="">
                 <Link href={"/"}>
                     <div className="flex items-center gap-0.5">

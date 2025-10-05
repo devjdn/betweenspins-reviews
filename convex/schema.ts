@@ -1,15 +1,14 @@
-// convex/schema.ts
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
     users: defineTable({
-        clerkUserId: v.string(), // Clerk's user.id
-        bio: v.optional(v.string()), // user bio
+        clerkUserId: v.string(),
+        bio: v.optional(v.string()),
         favoriteArtists: v.optional(
             v.array(
                 v.object({
-                    artist_id: v.string(), // Spotify artist ID
+                    artist_id: v.string(),
                     name: v.string(),
                 })
             )
@@ -17,12 +16,21 @@ export default defineSchema({
     }).index("by_clerkUserId", ["clerkUserId"]),
 
     reviews: defineTable({
-        userId: v.id("users"), // user who left the review
-        spotifyAlbumId: v.string(), // Spotify album ID
-        rating: v.number(), // required 1–10 or 1–5 scale
-        review: v.optional(v.string()), // optional text review
+        userId: v.id("users"),
+        spotifyAlbumId: v.string(),
+        albumTitle: v.string(),
+        rating: v.number(),
+        review: v.optional(v.string()),
     })
         .index("by_user", ["userId"])
-        .index("by_album", ["spotifyAlbumId"])
-        .index("by_user_album", ["userId", "spotifyAlbumId"]), // ensure one review per album per user
+        .index("by_albumId", ["spotifyAlbumId"])
+        .index("by_title", ["albumTitle"])
+        .index("by_user_album", ["userId", "spotifyAlbumId"]),
+
+    albumRatings: defineTable({
+        spotifyAlbumId: v.string(),
+        albumTitle: v.string(),
+        averageRating: v.number(),
+        totalRatings: v.number(),
+    }).index("by_albumId", ["spotifyAlbumId"]),
 });
