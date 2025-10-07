@@ -2,7 +2,7 @@ import Tracklist from "@/components/ui/albums/tracklist";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SpotifyAPI } from "@/lib/spotify";
-import { Library, Star, UserStar } from "lucide-react";
+import { Star, ListMusic, MessageCircle, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Vibrant } from "node-vibrant/node";
@@ -36,9 +36,9 @@ export default async function AlbumIdPage({
     return (
         <div className="space-y-8 mx-auto w-full">
             <header
-                className="pb-8 pt-28 px-4 md:px-8 border-b border-b-muted"
+                className="pb-8 pt-28 px-4 md:px-8"
                 style={{
-                    background: `linear-gradient(to top, rgb(${darkVibrant}), var(--background))`,
+                    background: `linear-gradient(to top, rgb(${darkVibrant}) , var(--background))`,
                 }}
             >
                 <div className="max-w-7xl w-full mx-auto flex flex-col gap-6 md:grid md:grid-cols-[256px_1fr] items-center md:items-end">
@@ -111,16 +111,16 @@ export default async function AlbumIdPage({
                     </div>
                 </div>
             </header>
-            <section className=" px-4 md:px-8">
+            <section className="px-4 md:px-8">
                 <div className="max-w-7xl mx-auto w-full">
                     <Tabs defaultValue="reviews">
                         <TabsList>
                             <TabsTrigger value="reviews">
-                                <UserStar />
+                                <MessageCircle />
                                 <span>Reviews</span>
                             </TabsTrigger>
                             <TabsTrigger value="tracks">
-                                <Library />
+                                <ListMusic />
                                 <span>Tracklist</span>
                             </TabsTrigger>
                         </TabsList>

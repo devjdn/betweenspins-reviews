@@ -57,7 +57,7 @@ export default function RootLayout({
                 >
                     <Header />
                     <ConvexClientProvider>
-                        <main className="flex flex-col flex-1 pb-8 relative">
+                        <main className="flex flex-col flex-1 pb-28 relative">
                             {children}
                         </main>
                     </ConvexClientProvider>

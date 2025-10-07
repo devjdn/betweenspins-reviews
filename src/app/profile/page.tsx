@@ -1,15 +1,11 @@
-import { Separator } from "@/components/ui/separator";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { CalendarDaysIcon, Music2, Pencil, User } from "lucide-react";
+import { Music2, Pencil } from "lucide-react";
 import Image from "next/image";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/../convex/_generated/api";
-import { Badge } from "@/components/ui/badge";
-import UserBio from "@/components/ui/profile/bio";
 import { formatFollowers, SpotifyAPI } from "@/lib/spotify";
 import { SpotifyArtist } from "@/types/spotify";
 import { Button } from "@/components/ui/button";
-import ArtistColorsBackground from "@/components/gradients/colorthief-gradient";
 
 export default async function ProfilePage() {
     const { redirectToSignIn } = await auth();
@@ -37,11 +33,10 @@ export default async function ProfilePage() {
 
     if (user) {
         return (
-            <div className="space-y-8 max-w-5xl w-full mx-auto pt-24 md:pt-32 px-4 md:px-8">
-                {/* <ArtistColorsBackground imageSrcs={artistImgs} /> */}
+            <div className="space-y-8 max-w-7xl w-full mx-auto pt-28 px-4 md:px-8">
                 <header className="space-y-12">
-                    <div className="flex flex-col items-center md:flex-row gap-4 md:gap-6 md:items-end">
-                        <div className="relative rounded-full aspect-square overflow-hidden border w-32 md:w-48 shadow-xl">
+                    <div className="w-full mx-auto flex flex-col gap-6 md:grid md:grid-cols-[172px_1fr] items-center md:items-end">
+                        <div className="w-64 md:w-auto relative aspect-square shadow-lg rounded-full md:shadow-2xl overflow-hidden bg-secondary">
                             <Image
                                 src={user.imageUrl}
                                 alt={`${user.username}'s Profile Picture`}
@@ -52,11 +47,11 @@ export default async function ProfilePage() {
                         </div>
 
                         <div className="flex flex-col gap-y-4 items-center md:items-start">
-                            <div className="md:space-y-1 font-semibold text-center md:text-left tracking-tight">
-                                <h1 className=" text-xl md:text-3xl">
+                            <div className="md:space-y-1 text-center md:text-left md:tracking-tight">
+                                <h1 className="font-medium md:text-3xl text-balance supports-[text-wrap:pretty]:text-pretty">
                                     {user.fullName ?? user.username}
                                 </h1>
-                                <p className="text-muted-foreground text-lg">{`@${user.username}`}</p>
+                                <p className="text-muted-foreground">{`@${user.username}`}</p>
                             </div>
 
                             <Button size={"sm"}>
