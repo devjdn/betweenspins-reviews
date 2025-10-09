@@ -1,44 +1,41 @@
 type BetweenSpinsLogoProps = {
-    size?: number; // size in px (width & height)
+    size?: number; // display size in px
+    className?: string;
 };
 
-export const BetweenSpinsLogo = ({ size = 30 }: BetweenSpinsLogoProps) => {
-    // scale stroke width based on size (relative to 30 base size)
-    const strokeWidth = (2.5 / 30) * size;
-
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={size}
-            height={size}
-            viewBox="0 0 30 30"
-        >
-            <mask id="cutout">
-                {/* Full outer circle */}
-                <circle cx="15" cy="15" r="12" fill="white" />
-
-                {/* Center hole */}
-                <circle cx="15" cy="15" r="3" fill="black" />
-
-                {/* Diagonal cut line */}
-                <path
-                    d="M23.49 6.51 L16.82 13.18"
-                    stroke="black"
-                    strokeWidth={strokeWidth}
-                    strokeLinecap="round"
-                />
-            </mask>
-
-            {/* Circle with cutouts (foreground color) */}
-            <circle
-                cx="15"
-                cy="15"
-                r="12"
-                fill="currentColor"
-                mask="url(#cutout)"
+export const BetweenSpinsLogo = ({
+    size = 32,
+    className,
+}: BetweenSpinsLogoProps) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={size}
+        height={size}
+        viewBox="0 0 128 128"
+        fill="none"
+        className={className}
+    >
+        <mask id="cutout">
+            {/* Full outer circle fills entire viewBox */}
+            <circle cx="64" cy="64" r="64" fill="white" />
+            {/* Center hole */}
+            <circle cx="64" cy="64" r="16" fill="black" />
+            {/* Diagonal cut */}
+            <path
+                d="M108 20 L72 56"
+                stroke="black"
+                strokeWidth="8"
+                strokeLinecap="round"
             />
-        </svg>
-    );
-};
+        </mask>
 
-export default BetweenSpinsLogo;
+        {/* Foreground circle using the mask */}
+        <circle
+            cx="64"
+            cy="64"
+            r="64"
+            fill="currentColor"
+            mask="url(#cutout)"
+        />
+    </svg>
+);

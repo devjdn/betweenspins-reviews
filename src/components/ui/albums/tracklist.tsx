@@ -1,11 +1,27 @@
-import type { SpotifyAlbumTracks } from "@/types/spotify";
+import type { SpotifyAlbum, SpotifyAlbumTracks } from "@/types/spotify";
 import { Hash } from "lucide-react";
 import React from "react";
+import ms from "ms";
 
-export default function Tracklist({ tracks }: { tracks: SpotifyAlbumTracks }) {
+interface TracklistProps {
+    tracks: SpotifyAlbumTracks;
+    releaseDate: SpotifyAlbum["release_date"];
+    copyrights: SpotifyAlbum["copyrights"];
+}
+
+export default function Tracklist({
+    tracks,
+    releaseDate,
+    copyrights,
+}: TracklistProps) {
     const { items: albumTracks } = tracks;
+    const runtimeMs = albumTracks.reduce(
+        (acc, track) => acc + track.duration_ms,
+        0
+    );
+    const runtimeConverted = ms(runtimeMs, { long: true });
     return (
-        <div>
+        <div className="space-y-4">
             <div className="p-4 border-b grid grid-cols-[40px_1fr] items-center md:grid-cols-[40px_1fr_1fr]">
                 <span>
                     <Hash className="size-4" />
@@ -13,7 +29,7 @@ export default function Tracklist({ tracks }: { tracks: SpotifyAlbumTracks }) {
                 <span className="text-sm">Title</span>
                 <span className="text-sm hidden md:inline">Artists</span>
             </div>
-            <div className="grid grid-flow-rows mt-4">
+            <div className="grid grid-flow-rows">
                 {albumTracks.map((track, i) => (
                     <div
                         key={i}
@@ -28,6 +44,27 @@ export default function Tracklist({ tracks }: { tracks: SpotifyAlbumTracks }) {
                         </span>
                     </div>
                 ))}
+            </div>
+            <div className="leading-snug text-muted-foreground text-sm space-y-1">
+                <p>
+                    {releaseDate
+                        ? new Date(releaseDate).toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                          })
+                        : "Unknown release date"}
+                </p>
+
+                <p>
+                    {`${albumTracks.length} ${
+                        albumTracks.length > 1 ? "Tracks" : "Track"
+                    }`}
+                    {", "}
+                    {runtimeConverted}
+                </p>
+
+                <p>{copyrights.find((c) => c.type === "P")?.text ?? ""}</p>
             </div>
         </div>
     );

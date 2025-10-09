@@ -3,18 +3,9 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-    Loader2,
-    FastForward,
-    Play,
-    Rewind,
-    Search,
-    UserRound,
-    X,
-} from "lucide-react";
+import { Search, UserRound, X } from "lucide-react";
 import { motion } from "motion/react";
 import StepHeader from "./step-header";
-import type { SpotifyArtist } from "@/types/spotify";
 import { useDebounce } from "@/hooks/use-debounce";
 import { formatFollowers } from "@/lib/spotify";
 import { searchSpotifyArtists, SimplifiedArtist } from "@/app/actions";

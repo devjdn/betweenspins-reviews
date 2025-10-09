@@ -1,5 +1,6 @@
 "use server";
 
+import { SpotifyAPI } from "@/lib/spotify";
 import { SpotifyArtist } from "@/types/spotify";
 
 interface SpotifyTokenResponse {
@@ -97,4 +98,16 @@ export async function searchSpotifyArtists(
         genres: artist.genres,
         popularity: artist.popularity,
     }));
+}
+
+export async function searchArtistsAndAlbums(query: string) {
+    if (!query || !query.trim()) return {};
+
+    try {
+        const results = await SpotifyAPI.searchArtistsAndAlbums(query);
+        return results;
+    } catch (error) {
+        console.error("Error in searchArtistsAndAlbumsAction:", error);
+        throw new Error("Failed to fetch Spotify search results");
+    }
 }
