@@ -28,12 +28,12 @@ export default async function AlbumIdPage({
         : "0.0";
 
     const palette = await Vibrant.from(album.images[0].url).getPalette();
-    const darkVibrant = palette.DarkVibrant?.rgb ?? [40, 40, 40];
+    const darkVibrant = palette.DarkMuted?.rgb ?? [40, 40, 40];
 
     return (
         <div className="space-y-8 mx-auto w-full">
             <header
-                className="pb-8 pt-28 px-4 md:px-8"
+                className="pb-8 pt-28 px-4 md:px-8 border-b border-b-muted"
                 style={{
                     background: `linear-gradient(to top, rgb(${darkVibrant}) , var(--background))`,
                 }}
