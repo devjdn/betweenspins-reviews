@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import React from "react";
-import {
-    Disc,
-    Disc3,
-    LogOut,
-    PenLine,
-    Settings,
-    UserRound,
-} from "lucide-react";
+import { LogOut, Settings, UserRound } from "lucide-react";
 import { useUser, useAuth } from "@clerk/nextjs";
 import {
     DropdownMenu,
@@ -21,25 +14,29 @@ import {
     DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import BetweenSpinsLogo from "../logo";
+import { BetweenSpinsLogo } from "../logo";
+import HeaderSearch from "./search/header-search";
 
 export default function Header() {
     const { isSignedIn, user, isLoaded } = useUser();
     const { signOut } = useAuth();
 
     return (
-        <header className="absolute w-full z-10 h-14 flex items-center justify-between px-4 md:px-6">
+        <header className="absolute w-full z-10 h-14 flex md:grid md:grid-cols-[150px_1fr_150px] md:gap-24 items-center justify-between px-4 md:px-6">
             <Link href={"/"}>
-                <div className="flex items-center gap-0.5">
-                    <BetweenSpinsLogo size={30} />
+                <div className="flex items-center gap-1">
+                    <BetweenSpinsLogo size={25} />
                     <span className="text-lg font-sans font-semibold tracking-[-0.075em]">
                         Between Spins
                     </span>
                 </div>
             </Link>
 
-            <div>
+            <div className="hidden md:flex max-w-xl min-w-lg mx-auto w-full">
+                <HeaderSearch />
+            </div>
+
+            <div className="justify-self-end size-8">
                 {isLoaded && isSignedIn && user && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>

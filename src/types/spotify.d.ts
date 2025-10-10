@@ -35,11 +35,23 @@ export interface SpotifyAlbum {
         width: number;
     }[];
     name: string;
-    release_date: string; // e.g. "2020-03-20"
+    release_date: string;
     release_date_precision: "year" | "month" | "day";
     type: "album";
     uri: string;
     artists: SpotifyArtist[];
+    tracks: SpotifyAlbumTracks;
+    copyrights: {
+        text: string;
+        type: "C" | "P";
+    }[];
+    external_ids?: {
+        isrc?: string;
+        ean?: string;
+        upc?: string;
+    };
+    popularity: number;
+    label: string;
 }
 
 export interface SpotifySearchResponse {
@@ -61,7 +73,6 @@ export interface SpotifySearchResponse {
         previous: string | null;
         total: number;
     };
-    // tracks, playlists, etc. can also be included
 }
 
 export interface SpotifyTrack {

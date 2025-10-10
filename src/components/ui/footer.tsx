@@ -1,35 +1,37 @@
 import Link from "next/link";
-import BetweenSpinsLogo from "../logo";
+import { BetweenSpinsLogo } from "../logo";
 
 export default function Footer() {
     return (
-        <footer className="bg-muted border-t px-4 md:px-6 pt-4 pb-12 space-y-8">
-            <div className="">
-                <Link href={"/"}>
-                    <div className="flex items-center gap-0.5">
-                        <BetweenSpinsLogo size={30} />
-                        <span className="text-lg font-sans font-semibold tracking-[-0.075em]">
-                            Between Spins
-                        </span>
-                    </div>
-                </Link>
-            </div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <p className="text-sm text-muted-foreground">
-                    &copy; {new Date().getFullYear()} Between Spins. All rights
-                    reserved.
-                </p>
-                <span className="text-sm text-muted-foreground">
-                    All music data provided by{" "}
-                    <Link
-                        href={"https://spotify.com"}
-                        className="hover:underline"
-                        target="_blank"
-                    >
-                        Spotify
+        <footer className="border-t bg-secondary px-4 md:px-8 xl:px-0 pt-4 pb-12 space-y-8">
+            <div className="mx-auto w-full max-w-7xl">
+                <div className="">
+                    <Link href={"/"}>
+                        <div className="flex items-center gap-1">
+                            <BetweenSpinsLogo size={25} />
+                            <span className="text-lg font-sans font-semibold tracking-[-0.075em]">
+                                Between Spins
+                            </span>
+                        </div>
                     </Link>
-                    .
-                </span>
+                </div>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-y-1 gap-x-4">
+                    <p className="text-sm text-muted-foreground">
+                        &copy; {new Date().getFullYear()} Between Spins. All
+                        rights reserved.
+                    </p>
+                    <span className="text-sm text-muted-foreground">
+                        All music data provided by{" "}
+                        <Link
+                            href={"https://spotify.com"}
+                            className="hover:underline"
+                            target="_blank"
+                        >
+                            Spotify
+                        </Link>
+                        .
+                    </span>
+                </div>
             </div>
         </footer>
     );

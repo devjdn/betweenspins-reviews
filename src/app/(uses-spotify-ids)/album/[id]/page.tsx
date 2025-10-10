@@ -2,7 +2,7 @@ import Tracklist from "@/components/ui/albums/tracklist";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SpotifyAPI } from "@/lib/spotify";
-import { Star, ListMusic, MessageCircle, MessageSquare } from "lucide-react";
+import { Star, ListMusic, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Vibrant } from "node-vibrant/node";
@@ -17,10 +17,7 @@ export default async function AlbumIdPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const [album, tracks] = await Promise.all([
-        SpotifyAPI.getAlbum(id),
-        SpotifyAPI.getAlbumTracks(id),
-    ]);
+    const [album] = await Promise.all([SpotifyAPI.getAlbum(id)]);
     const reviews = await fetchQuery(api.reviews.getReviewsByAlbum, {
         spotifyAlbumId: id,
     });
@@ -147,7 +144,11 @@ export default async function AlbumIdPage({
                             )}
                         </TabsContent>
                         <TabsContent value="tracks">
-                            <Tracklist tracks={tracks} />
+                            <Tracklist
+                                tracks={album.tracks}
+                                releaseDate={album.release_date}
+                                copyrights={album.copyrights}
+                            />
                         </TabsContent>
                     </Tabs>
                 </div>

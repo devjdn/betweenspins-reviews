@@ -274,17 +274,23 @@ export class SpotifyAPI {
     }
 
     /**
-     * Search for tracks
+     * Search across both artists and albums
      */
-    static async searchTracks(query: string, limit: number = 10) {
-        if (!query.trim()) return [];
+    static async searchArtistsAndAlbums(
+        query: string,
+        limit: number = 10
+    ): Promise<SpotifySearchResponse> {
+        if (!query.trim()) {
+            return {};
+        }
 
         const encodedQuery = encodeURIComponent(query);
-        const data = await this.makeRequest<{ tracks: { items: any[] } }>(
-            `/search?q=${encodedQuery}&type=track&limit=${limit}`
+        const data = await this.makeRequest<SpotifySearchResponse>(
+            `/search?q=${encodedQuery}&type=artist,album&limit=${limit}`
         );
 
-        return data.tracks.items;
+        // Return the Spotify response directly — no mapping or restructuring
+        return data;
     }
 
     /**

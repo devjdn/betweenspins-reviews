@@ -8,6 +8,8 @@ import {
 import "./globals.css";
 import Header from "@/components/ui/header";
 import { ClerkProvider } from "@clerk/nextjs";
+import ReactQueryProvider from "./ReactQueryProvider";
+
 import { shadcn } from "@clerk/themes";
 import ConvexClientProvider from "./ConvexClientProvider";
 import Footer from "@/components/ui/footer";
@@ -55,13 +57,16 @@ export default function RootLayout({
                 <body
                     className={`${instrument_sans.variable} ${dm_serif.variable} ${instrument_serif.variable} ${geistMono.variable} antialiased flex flex-col min-h-dvh`}
                 >
-                    <Header />
                     <ConvexClientProvider>
-                        <main className="flex flex-col flex-1 pb-28 relative">
-                            {children}
-                        </main>
+                        <ReactQueryProvider>
+                            <Header />
+
+                            <main className="flex flex-col flex-1 pb-28 relative">
+                                {children}
+                            </main>
+                            <Footer />
+                        </ReactQueryProvider>
                     </ConvexClientProvider>
-                    <Footer />
                 </body>
             </html>
         </ClerkProvider>
