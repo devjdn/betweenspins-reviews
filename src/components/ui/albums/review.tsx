@@ -1,14 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { PencilLine, X } from "lucide-react";
-import ReviewForm from "../review-shared/review-form";
-import { AlbumReview } from "@/types/convex";
+import ReviewForm from "../review/review-form";
 import UserReview from "./user-review";
 import { api } from "../../../../convex/_generated/api";
 import { useQuery } from "convex/react";
+import { ReviewFormSkeleton } from "../review/skeleton";
+import { useReviewStore } from "@/stores/useReviewStore";
 
 interface ReviewProps
     extends Omit<React.ComponentProps<typeof ReviewForm>, "clerkUserId"> {
@@ -16,20 +14,27 @@ interface ReviewProps
 }
 
 export default function Review({ album, clerkUserId }: ReviewProps) {
-    const userReview = useQuery(
+    const { userReview, setUserReview } = useReviewStore();
+
+    const fetchedReview = useQuery(
         api.reviews.getReviewsById,
-        clerkUserId
-            ? {
-                  clerkUserId,
-                  spotifyAlbumId: album.id,
-              }
-            : "skip"
+        clerkUserId ? { clerkUserId, spotifyAlbumId: album.id } : "skip"
     );
 
-    return userReview && clerkUserId ? (
-        <UserReview review={userReview} clerkUserId={clerkUserId} />
-    ) : !userReview && clerkUserId ? (
-        <ReviewForm album={album} clerkUserId={clerkUserId} />
+    React.useEffect(() => {
+        if (fetchedReview !== undefined) {
+            setUserReview(fetchedReview);
+        }
+    }, [fetchedReview, setUserReview]);
+
+    return clerkUserId ? (
+        fetchedReview === undefined && userReview === null ? (
+            <ReviewFormSkeleton />
+        ) : userReview && userReview !== "none" ? (
+            <UserReview review={userReview} clerkUserId={clerkUserId} />
+        ) : (
+            <ReviewForm album={album} clerkUserId={clerkUserId} />
+        )
     ) : (
         <p className="text-sm text-muted-foreground">
             Sign in to write a review.
