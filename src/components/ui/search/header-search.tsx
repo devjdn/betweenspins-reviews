@@ -85,7 +85,7 @@ export default function HeaderSearch() {
 
     return (
         <div ref={ref} className="relative w-full">
-            <InputGroup className="rounded-full bg-background/30">
+            <InputGroup className="rounded-full">
                 <InputGroupInput
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}

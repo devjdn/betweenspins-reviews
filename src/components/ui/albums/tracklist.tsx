@@ -2,6 +2,7 @@ import type { SpotifyAlbum, SpotifyAlbumTracks } from "@/types/spotify";
 import { Hash } from "lucide-react";
 import React from "react";
 import ms from "ms";
+import { MdExplicit } from "react-icons/md";
 
 interface TracklistProps {
     tracks: SpotifyAlbumTracks;
@@ -55,10 +56,13 @@ export default function Tracklist({
                         {tracks.map((track) => (
                             <div
                                 key={track.id}
-                                className="grid grid-cols-[40px_1fr] md:grid-cols-[40px_1fr_1fr] text-sm text-muted-foreground hover:text-foreground p-4 rounded-md md:rounded-lg odd:bg-muted hover:bg-secondary"
+                                className="grid grid-cols-[40px_1fr] md:grid-cols-[40px_1fr_1fr] text-sm text-muted-foreground stroke-muted-foreground hover:stroke-foreground hover:text-foreground p-4 rounded-md md:rounded-lg odd:bg-muted hover:bg-secondary"
                             >
                                 <span>{track.track_number}</span>
-                                <span>{track.name}</span>
+                                <span className="inline-flex items-center gap-1">
+                                    {track.name}{" "}
+                                    {track.explicit && <MdExplicit />}
+                                </span>
                                 <span className="hidden md:inline">
                                     {track.artists
                                         .map((artist) => artist.name)
@@ -70,7 +74,6 @@ export default function Tracklist({
                 </div>
             ))}
 
-            {/* Footer metadata */}
             <div className="leading-snug text-muted-foreground text-sm space-y-1">
                 <p>
                     {releaseDate
