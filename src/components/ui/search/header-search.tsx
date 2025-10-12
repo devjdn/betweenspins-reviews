@@ -15,7 +15,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useQuery } from "@tanstack/react-query";
-import clsx from "clsx";
 import { ArrowUpRight, Library, Music2, SearchIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,6 +26,7 @@ export default function HeaderSearch() {
     const [searchQuery, setSearchQuery] = React.useState("");
     const [isOpen, setIsOpen] = React.useState(false);
     const [activeIndex, setActiveIndex] = React.useState(0);
+    const ref = React.useRef<HTMLDivElement | null>(null);
 
     const debouncedQuery = useDebounce(searchQuery, 300);
 
@@ -50,6 +50,26 @@ export default function HeaderSearch() {
         }
     }, [debouncedQuery]);
 
+    React.useEffect(() => {
+        const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+            if (!ref.current) return;
+            const target = event.target as Node | null;
+            if (isOpen && target && !ref.current.contains(target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside, {
+            passive: true,
+        });
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
+    }, [isOpen]);
+
     const artists = searchResults?.artists?.items ?? [];
     const albums = searchResults?.albums?.items ?? [];
 
@@ -64,12 +84,15 @@ export default function HeaderSearch() {
     };
 
     return (
-        <div className="relative w-full">
-            <InputGroup className="rounded-full bg-background/30">
+        <div ref={ref} className="relative w-full">
+            <InputGroup className="rounded-full">
                 <InputGroupInput
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    onFocus={() => {
+                        if (searchQuery.trim()) setIsOpen(true);
+                    }}
                     placeholder="Search for albums, artists, or reviews..."
                 />
                 <InputGroupAddon>
@@ -112,7 +135,7 @@ export default function HeaderSearch() {
 
                         {/* Albums */}
                         <TabsContent value="albums">
-                            <div className="max-h-[400px] overflow-y-auto flex flex-col gap-1">
+                            <div className="max-h-[400px] rounded-2xl overflow-y-auto flex flex-col gap-1">
                                 {albums.length === 0 && (
                                     <p className="text-sm text-muted-foreground px-2">
                                         No albums found.
@@ -126,7 +149,7 @@ export default function HeaderSearch() {
                                         onClick={() => setIsOpen(false)}
                                     >
                                         {album.images?.[1]?.url && (
-                                            <div className="relative size-14 rounded-lg overflow-hidden">
+                                            <div className="relative size-12 rounded-lg overflow-hidden">
                                                 <Image
                                                     src={album.images[1].url}
                                                     alt={album.name}

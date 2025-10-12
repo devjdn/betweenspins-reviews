@@ -2,6 +2,8 @@
 
 import { SpotifyAPI } from "@/lib/spotify";
 import { SpotifyArtist } from "@/types/spotify";
+import { api } from "../../convex/_generated/api";
+import { fetchMutation } from "convex/nextjs";
 
 interface SpotifyTokenResponse {
     access_token: string;
@@ -82,7 +84,7 @@ export async function searchSpotifyArtists(
     console.log("Spotify response status:", res.status, res.statusText);
 
     if (!res.ok) {
-        const errBody = await res.text(); // 👈 capture raw error text
+        const errBody = await res.text();
         console.error("Spotify API error:", errBody);
         throw new Error("Failed to search Spotify artists");
     }
@@ -109,5 +111,31 @@ export async function searchArtistsAndAlbums(query: string) {
     } catch (error) {
         console.error("Error in searchArtistsAndAlbumsAction:", error);
         throw new Error("Failed to fetch Spotify search results");
+    }
+}
+
+// New server action for submitting reviews
+export async function submitReviewAction(
+    clerkUserId: string,
+    spotifyAlbumId: string,
+    albumTitle: string,
+    albumArtists: string[],
+    reviewTitle?: string,
+    rating: number = 0,
+    review?: string
+) {
+    try {
+        return await fetchMutation(api.reviews.submitReview, {
+            clerkUserId,
+            spotifyAlbumId,
+            albumTitle,
+            albumArtists,
+            reviewTitle,
+            rating,
+            review,
+        });
+    } catch (error) {
+        console.error("Failed to submit review:", error);
+        throw new Error("Failed to submit review");
     }
 }

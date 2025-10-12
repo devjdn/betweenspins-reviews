@@ -49,7 +49,7 @@ export function CircularCharacterCounter({
                 />
             </svg>
             {/* Center text showing remaining characters */}
-            <div className="absolute inset-0 flex items-center justify-center text-[10px] font-medium text-muted-foreground tabular-nums">
+            <div className="absolute -translate-1/2 left-1/2 top-1/2 flex items-center justify-center text-[10px] font-medium text-muted-foreground tabular-nums">
                 {remaining}
             </div>
         </div>

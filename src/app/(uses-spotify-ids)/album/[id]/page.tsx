@@ -2,7 +2,13 @@ import Tracklist from "@/components/ui/albums/tracklist";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SpotifyAPI } from "@/lib/spotify";
-import { Star, ListMusic, MessageCircle } from "lucide-react";
+import {
+    ListMusic,
+    MessageCircle,
+    Pencil,
+    Star,
+    UserRound,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Vibrant } from "node-vibrant/node";
@@ -10,6 +16,9 @@ import { FaSpotify } from "react-icons/fa";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "../../../../../convex/_generated/api";
 import Review from "@/components/ui/albums/review";
+import AlbumReviews from "@/components/ui/albums/album-reviews";
+import { currentUser } from "@clerk/nextjs/server";
+import { MdExplicit } from "react-icons/md";
 
 export default async function AlbumIdPage({
     params,
@@ -17,23 +26,22 @@ export default async function AlbumIdPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const [album] = await Promise.all([SpotifyAPI.getAlbum(id)]);
-    const reviews = await fetchQuery(api.reviews.getReviewsByAlbum, {
-        spotifyAlbumId: id,
-    });
+    const user = await currentUser();
 
-    const avgRating = reviews.length
-        ? reviews.reduce((acc, review) => acc + review.rating, 0) /
-          reviews.length
-        : "0.0";
+    const [album, reviews, rating] = await Promise.all([
+        SpotifyAPI.getAlbum(id),
+        fetchQuery(api.reviews.getReviewsByAlbum, { spotifyAlbumId: id }),
+        fetchQuery(api.albumRatings.getAlbumRating, { spotifyAlbumId: id }),
+    ]);
 
     const palette = await Vibrant.from(album.images[0].url).getPalette();
     const darkVibrant = palette.DarkVibrant?.rgb ?? [40, 40, 40];
+    const isAlbumExplicit = album.tracks.items.some((t, _) => t.explicit);
 
     return (
         <div className="space-y-8 mx-auto w-full">
             <header
-                className="pb-8 pt-28 px-4 md:px-8"
+                className="pb-8 pt-28 px-4 md:px-8 border-b border-b-muted"
                 style={{
                     background: `linear-gradient(to top, rgb(${darkVibrant}) , var(--background))`,
                 }}
@@ -51,9 +59,14 @@ export default async function AlbumIdPage({
                     <div className="space-y-4 md:space-y-8">
                         <div className="space-y-4">
                             <div className="space-y-1 text-center md:text-left md:tracking-tight">
-                                <h1 className="font-medium md:text-3xl text-balance supports-[text-wrap:pretty]:text-pretty">
-                                    {album.name}
-                                </h1>
+                                <div className="inline-flex items-center gap-1">
+                                    <h1 className="font-semibold md:text-3xl text-balance supports-[text-wrap:pretty]:text-pretty">
+                                        {album.name}
+                                    </h1>
+                                    {isAlbumExplicit && (
+                                        <MdExplicit className="md:size-7" />
+                                    )}
+                                </div>
                                 <div className="font-normal md:font-medium md:text-2xl">
                                     {album.artists.map((artist, i) => {
                                         const isLast =
@@ -82,9 +95,13 @@ export default async function AlbumIdPage({
                             </div>
 
                             <div className="w-fit text-sm h-4 space-x-2 mx-auto md:mx-0 flex items-center">
-                                <span className="flex gap-1 items-center">
+                                <span className="inline-flex gap-1 items-center">
                                     <Star className="size-3.5" />
-                                    {avgRating} {`(${reviews.length} ratings)`}
+                                    <p className="">{`${
+                                        rating
+                                            ? rating.averageRating
+                                            : "Unrated"
+                                    }`}</p>
                                 </span>
                                 <p>{"•"}</p>
                                 <p>{album.release_date.split("-")[0]}</p>
@@ -93,9 +110,7 @@ export default async function AlbumIdPage({
                             </div>
                         </div>
 
-                        <div className="w-full mx-auto md:mx-0 grid grid-cols-2 gap-2 md:flex md:w-fit md:gap-2">
-                            <Review album={album} />
-
+                        <div className="w-full mx-auto md:mx-0">
                             <Button
                                 className="w-full md:w-auto"
                                 variant="mediaOption"
@@ -110,38 +125,32 @@ export default async function AlbumIdPage({
             </header>
             <section className="px-4 md:px-8">
                 <div className="max-w-7xl mx-auto w-full">
-                    <Tabs defaultValue="reviews">
+                    <Tabs defaultValue="review">
                         <TabsList>
-                            <TabsTrigger value="reviews">
+                            <TabsTrigger value="review">
+                                <Pencil />
+                                <span>Review</span>
+                            </TabsTrigger>
+                            <TabsTrigger value="community">
                                 <MessageCircle />
-                                <span>Reviews</span>
+                                <span>Community</span>
                             </TabsTrigger>
                             <TabsTrigger value="tracks">
                                 <ListMusic />
                                 <span>Tracklist</span>
                             </TabsTrigger>
                         </TabsList>
-                        <TabsContent value="reviews">
-                            {reviews.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                    {reviews.map((review, i) => (
-                                        <div key={i}>
-                                            <p>{review.rating}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="h-75 flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12">
-                                    <div className="space-y-1">
-                                        <h3 className="text-xl font-medium">
-                                            No reviews found
-                                        </h3>
-                                        <p className="text-muted-foreground">
-                                            Be the first to review this album.
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
+                        <TabsContent value="review" className="pt-4">
+                            <Review
+                                album={album}
+                                clerkUserId={user?.id ?? undefined}
+                            />
+                        </TabsContent>
+                        <TabsContent value="community" className="pt-4">
+                            <AlbumReviews
+                                reviews={reviews}
+                                spotifyAlbumId={id}
+                            />
                         </TabsContent>
                         <TabsContent value="tracks">
                             <Tracklist

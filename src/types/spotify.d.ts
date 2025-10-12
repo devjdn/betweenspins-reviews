@@ -52,6 +52,9 @@ export interface SpotifyAlbum {
     };
     popularity: number;
     label: string;
+    restrictions?: {
+        reason: "market" | "product" | "explicit";
+    };
 }
 
 export interface SpotifySearchResponse {

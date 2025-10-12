@@ -19,6 +19,8 @@ export default defineSchema({
         userId: v.id("users"),
         spotifyAlbumId: v.string(),
         albumTitle: v.string(),
+        albumArtists: v.array(v.string()),
+        reviewTitle: v.optional(v.string()),
         rating: v.number(),
         review: v.optional(v.string()),
     })
