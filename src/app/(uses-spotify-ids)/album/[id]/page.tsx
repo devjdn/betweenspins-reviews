@@ -39,14 +39,14 @@ export default async function AlbumIdPage({
     const isAlbumExplicit = album.tracks.items.some((t, _) => t.explicit);
 
     return (
-        <div className="space-y-8 mx-auto w-full">
+        <div className="space-y-4 mx-auto w-full">
             <header
-                className="pb-8 pt-28 px-4 md:px-8 border-b border-b-muted"
+                className="py-8 px-4 md:px-8 border-b md:mx-6 md:rounded-4xl border-b-muted"
                 style={{
-                    background: `linear-gradient(to top, rgb(${darkVibrant}) , var(--background))`,
+                    background: `rgb(${darkVibrant})`,
                 }}
             >
-                <div className="max-w-7xl w-full mx-auto flex flex-col gap-6 md:grid md:grid-cols-[256px_1fr] items-center md:items-end">
+                <div className="max-w-6xl w-full mx-auto flex flex-col gap-6 md:grid md:grid-cols-[256px_1fr] items-center md:items-end">
                     <div className="w-80 md:w-auto relative aspect-square shadow-lg rounded-lg md:shadow-2xl overflow-hidden bg-secondary">
                         <Image
                             src={album.images[0].url}
@@ -123,8 +123,8 @@ export default async function AlbumIdPage({
                     </div>
                 </div>
             </header>
-            <section className="px-4 md:px-8">
-                <div className="max-w-7xl mx-auto w-full">
+            <section className="px-4 md:px-8 md:bg-muted/50 md:rounded-4xl md:py-8 md:mx-6">
+                <div className="max-w-6xl mx-auto w-full">
                     <Tabs defaultValue="review">
                         <TabsList>
                             <TabsTrigger value="review">
