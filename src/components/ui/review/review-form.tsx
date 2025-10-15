@@ -122,7 +122,7 @@ export default function ReviewForm({
                                             }
                                             className="w-full"
                                         />
-                                        <div className="flex justify-between text-xs text-muted-foreground">
+                                        <div className="flex justify-between text-sm text-center text-muted-foreground">
                                             {Array.from(
                                                 { length: 11 },
                                                 (_, i) => (

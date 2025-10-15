@@ -55,16 +55,19 @@ export default function RootLayout({
         >
             <html lang="en" suppressHydrationWarning>
                 <body
-                    className={`${instrument_sans.variable} ${dm_serif.variable} ${instrument_serif.variable} ${geistMono.variable} antialiased flex flex-col min-h-dvh`}
+                    className={`${instrument_sans.variable} ${dm_serif.variable} ${instrument_serif.variable} ${geistMono.variable} antialiased flex flex-col h-dvh overflow-hidden`}
                 >
                     <ConvexClientProvider>
                         <ReactQueryProvider>
                             <Header />
 
-                            <main className="flex flex-col flex-1 pb-28 relative">
-                                {children}
+                            <main className="flex flex-col md:grid md:grid-cols-[256px_1fr] flex-1 md:pb-6 md:px-6 md:space-x-6 overflow-hidden relative">
+                                <aside className="hidden md:flex bg-secondary rounded-xl"></aside>
+                                <div className="overflow-y-scroll space-y-12 md:rounded-xl">
+                                    {children}
+                                    <Footer />
+                                </div>
                             </main>
-                            <Footer />
                         </ReactQueryProvider>
                     </ConvexClientProvider>
                 </body>

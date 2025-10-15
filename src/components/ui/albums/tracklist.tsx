@@ -34,14 +34,14 @@ export default function Tracklist({
     const runtimeConverted = ms(runtimeMs, { long: true });
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 @container">
             {/* Header row */}
-            <div className="p-4 border-b grid grid-cols-[40px_1fr] items-center md:grid-cols-[40px_1fr_1fr]">
+            <div className="p-4 border-b grid grid-cols-[40px_1fr] items-center @3xl:grid-cols-[40px_1fr_1fr]">
                 <span>
                     <Hash className="size-4" />
                 </span>
                 <span className="text-sm">Title</span>
-                <span className="text-sm hidden md:inline">Artists</span>
+                <span className="text-sm hidden @3xl:inline">Artists</span>
             </div>
 
             {Object.entries(discs).map(([discNumber, tracks]) => (
@@ -56,14 +56,14 @@ export default function Tracklist({
                         {tracks.map((track) => (
                             <div
                                 key={track.id}
-                                className="grid grid-cols-[40px_1fr] md:grid-cols-[40px_1fr_1fr] text-sm text-muted-foreground stroke-muted-foreground hover:stroke-foreground hover:text-foreground p-4 rounded-md md:rounded-lg odd:bg-muted hover:bg-secondary"
+                                className="grid grid-cols-[40px_1fr] @3xl:grid-cols-[40px_1fr_1fr] text-sm text-muted-foreground stroke-muted-foreground hover:stroke-foreground hover:text-foreground p-4 rounded-md @3xl:rounded-lg odd:bg-muted hover:bg-secondary"
                             >
                                 <span>{track.track_number}</span>
                                 <span className="inline-flex items-center gap-1">
                                     {track.name}{" "}
                                     {track.explicit && <MdExplicit />}
                                 </span>
-                                <span className="hidden md:inline">
+                                <span className="hidden @3xl:inline">
                                     {track.artists
                                         .map((artist) => artist.name)
                                         .join(", ")}

@@ -26,7 +26,6 @@ export default function Header() {
     const { ref, inView } = useInView({
         threshold: 0,
     });
-    const pathname = usePathname();
 
     return (
         <>
@@ -51,7 +50,7 @@ export default function Header() {
                 </Link>
 
                 <div className="hidden md:flex md:max-w-md lg:max-w-lg md:justify-self-start lg:justify-self-center w-full">
-                    {pathname !== "/" && <HeaderSearch />}
+                    <HeaderSearch />
                 </div>
 
                 <div className="hidden md:inline justify-self-end size-8">

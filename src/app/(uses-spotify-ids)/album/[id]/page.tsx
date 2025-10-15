@@ -2,13 +2,7 @@ import Tracklist from "@/components/ui/albums/tracklist";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SpotifyAPI } from "@/lib/spotify";
-import {
-    ListMusic,
-    MessageCircle,
-    Pencil,
-    Star,
-    UserRound,
-} from "lucide-react";
+import { ListMusic, MessageCircle, Pencil, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Vibrant } from "node-vibrant/node";
@@ -35,19 +29,19 @@ export default async function AlbumIdPage({
     ]);
 
     const palette = await Vibrant.from(album.images[0].url).getPalette();
-    const darkVibrant = palette.DarkVibrant?.rgb ?? [40, 40, 40];
+    const darkVibrant = palette.Vibrant?.rgb ?? [40, 40, 40];
     const isAlbumExplicit = album.tracks.items.some((t, _) => t.explicit);
 
     return (
-        <div className="space-y-4 mx-auto w-full">
+        <div className="@container space-y-4 w-full">
             <header
-                className="py-8 px-4 md:px-8 border-b md:mx-6 md:rounded-4xl border-b-muted"
+                className="py-6 px-4 @3xl:px-6 md:rounded-xl"
                 style={{
-                    background: `rgb(${darkVibrant})`,
+                    background: `linear-gradient(to top, rgba(${darkVibrant}, 0.5), rgb(${darkVibrant}))`,
                 }}
             >
-                <div className="max-w-6xl w-full mx-auto flex flex-col gap-6 md:grid md:grid-cols-[256px_1fr] items-center md:items-end">
-                    <div className="w-80 md:w-auto relative aspect-square shadow-lg rounded-lg md:shadow-2xl overflow-hidden bg-secondary">
+                <div className="max-w-6xl w-full mx-auto flex flex-col gap-6 @3xl:grid @3xl:grid-cols-[256px_1fr] items-center @3xl:items-end">
+                    <div className="w-80 @3xl:w-auto relative aspect-square shadow-lg rounded-md @3xl:shadow-2xl overflow-hidden bg-secondary">
                         <Image
                             src={album.images[0].url}
                             alt={`${album.name} Album Cover`}
@@ -56,18 +50,18 @@ export default async function AlbumIdPage({
                         />
                     </div>
 
-                    <div className="space-y-4 md:space-y-8">
+                    <div className="space-y-4 @3xl:space-y-8">
                         <div className="space-y-4">
-                            <div className="space-y-1 text-center md:text-left md:tracking-tight">
-                                <div className="inline-flex items-center gap-1">
-                                    <h1 className="font-semibold md:text-3xl text-balance supports-[text-wrap:pretty]:text-pretty">
-                                        {album.name}
-                                    </h1>
-                                    {isAlbumExplicit && (
-                                        <MdExplicit className="md:size-7" />
-                                    )}
-                                </div>
-                                <div className="font-normal md:font-medium md:text-2xl">
+                            <div className="space-y-1 text-center @3xl:text-left @3xl:tracking-tight">
+                                <span className="inline-flex items-baseline flex-wrap font-semibold @3xl:text-3xl text-balance supports-[text-wrap:pretty]:text-pretty">
+                                    <span>{album.name}</span>
+                                    <span className="inline ml-1 translate-y-[2px]">
+                                        {isAlbumExplicit && (
+                                            <MdExplicit className="@3xl:size-7" />
+                                        )}
+                                    </span>
+                                </span>
+                                <div className="font-normal @3xl:font-medium @3xl:text-2xl">
                                     {album.artists.map((artist, i) => {
                                         const isLast =
                                             i === album.artists.length - 1;
@@ -94,7 +88,7 @@ export default async function AlbumIdPage({
                                 </div>
                             </div>
 
-                            <div className="w-fit text-sm h-4 space-x-2 mx-auto md:mx-0 flex items-center">
+                            <div className="w-fit text-sm h-4 space-x-2 mx-auto @3xl:mx-0 flex items-center">
                                 <span className="inline-flex gap-1 items-center">
                                     <Star className="size-3.5" />
                                     <p className="">{`${
@@ -110,9 +104,9 @@ export default async function AlbumIdPage({
                             </div>
                         </div>
 
-                        <div className="w-full mx-auto md:mx-0">
+                        <div className="w-full mx-auto @3xl:mx-0">
                             <Button
-                                className="w-full md:w-auto"
+                                className="w-full @3xl:w-auto"
                                 variant="mediaOption"
                                 size={"lg"}
                             >
@@ -123,20 +117,20 @@ export default async function AlbumIdPage({
                     </div>
                 </div>
             </header>
-            <section className="px-4 md:px-8 md:bg-muted/50 md:rounded-4xl md:py-8 md:mx-6">
+            <section className="px-4 md:px-6">
                 <div className="max-w-6xl mx-auto w-full">
                     <Tabs defaultValue="review">
                         <TabsList>
                             <TabsTrigger value="review">
-                                <Pencil />
+                                {/* <Pencil /> */}
                                 <span>Review</span>
                             </TabsTrigger>
                             <TabsTrigger value="community">
-                                <MessageCircle />
+                                {/* <MessageCircle /> */}
                                 <span>Community</span>
                             </TabsTrigger>
                             <TabsTrigger value="tracks">
-                                <ListMusic />
+                                {/* <ListMusic /> */}
                                 <span>Tracklist</span>
                             </TabsTrigger>
                         </TabsList>
