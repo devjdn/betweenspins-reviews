@@ -13,6 +13,8 @@ import ReactQueryProvider from "./ReactQueryProvider";
 import { shadcn } from "@clerk/themes";
 import ConvexClientProvider from "./ConvexClientProvider";
 import Footer from "@/components/ui/footer";
+import Sidebar from "@/components/ui/sidebar/sidebar";
+import { currentUser } from "@clerk/nextjs/server";
 
 const instrument_sans = Instrument_Sans({
     variable: "--font-instrument-sans",
@@ -42,11 +44,12 @@ export const metadata: Metadata = {
         "Between Spins is a music review and discovery platform where you can rate albums, share reviews, keep a personal music diary, and explore new artists and albums through the community.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const user = await currentUser();
     return (
         <ClerkProvider
             appearance={{
@@ -62,9 +65,9 @@ export default function RootLayout({
                             <Header />
 
                             <main className="flex flex-col md:grid md:grid-cols-[256px_1fr] flex-1 md:pb-6 md:px-6 md:space-x-6 overflow-hidden relative">
-                                <aside className="hidden md:flex bg-secondary rounded-xl"></aside>
-                                <div className="overflow-y-scroll space-y-12 md:rounded-xl">
-                                    {children}
+                                <Sidebar clerkUserId={user?.id} />
+                                <div className="overflow-y-scroll flex flex-col flex-1 space-y-12 md:rounded-xl">
+                                    <div className="flex-1">{children}</div>
                                     <Footer />
                                 </div>
                             </main>

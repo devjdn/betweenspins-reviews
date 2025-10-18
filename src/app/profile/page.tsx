@@ -33,7 +33,7 @@ export default async function ProfilePage() {
 
     if (user) {
         return (
-            <div className="space-y-8 max-w-7xl w-full mx-auto pt-28 px-4 md:px-8">
+            <div className="space-y-8 max-w-7xl w-full mx-auto px-4 md:px-8">
                 <header className="space-y-12">
                     <div className="w-full mx-auto flex flex-col gap-6 md:grid md:grid-cols-[172px_1fr] items-center md:items-end">
                         <div className="w-64 md:w-auto relative aspect-square shadow-lg rounded-full md:shadow-2xl overflow-hidden bg-secondary">

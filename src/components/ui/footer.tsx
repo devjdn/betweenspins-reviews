@@ -3,7 +3,7 @@ import { BetweenSpinsLogo } from "../logo";
 
 export default function Footer() {
     return (
-        <footer className="border-t md:border-none bg-muted md:rounded-xl px-4 md:px-8 pt-4 pb-12 space-y-8">
+        <footer className="@container border-t md:border-none bg-muted md:rounded-xl px-4 md:px-8 pt-4 pb-12 space-y-8">
             <div className="mx-auto w-full max-w-6xl flex flex-col gap-4">
                 <div className="">
                     <Link href={"/"}>
@@ -15,7 +15,7 @@ export default function Footer() {
                         </div>
                     </Link>
                 </div>
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-y-1 gap-x-4">
+                <div className="flex flex-col @3xl:flex-row justify-between items-start @3xl:items-center gap-y-1 gap-x-4">
                     <p className="text-sm text-muted-foreground">
                         &copy; {new Date().getFullYear()} Between Spins. All
                         rights reserved.

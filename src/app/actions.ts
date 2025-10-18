@@ -139,3 +139,15 @@ export async function submitReviewAction(
         throw new Error("Failed to submit review");
     }
 }
+
+export async function getFavouriteArtists(ids: string[]) {
+    if (!ids || ids.length === 0) return [];
+
+    try {
+        const artists = await SpotifyAPI.getArtists(ids);
+        return artists ?? [];
+    } catch (error) {
+        console.error("❌ Failed to fetch favourite artists:", error);
+        return [];
+    }
+}

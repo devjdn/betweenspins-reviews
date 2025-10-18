@@ -2,10 +2,10 @@ import Tracklist from "@/components/ui/albums/tracklist";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SpotifyAPI } from "@/lib/spotify";
-import { ListMusic, MessageCircle, Pencil, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Vibrant } from "node-vibrant/node";
+import { getAverageColor } from "fast-average-color-node";
 import { FaSpotify } from "react-icons/fa";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "../../../../../convex/_generated/api";
@@ -28,8 +28,20 @@ export default async function AlbumIdPage({
         fetchQuery(api.albumRatings.getAlbumRating, { spotifyAlbumId: id }),
     ]);
 
-    const palette = await Vibrant.from(album.images[0].url).getPalette();
-    const darkVibrant = palette.Vibrant?.rgb ?? [40, 40, 40];
+    const color = await getAverageColor(album.images[0].url);
+    const [r, g, b] = color.value;
+
+    // Create a slightly darkened version
+    const darkened = [
+        Math.max(0, r * 0.9),
+        Math.max(0, g * 0.9),
+        Math.max(0, b * 0.9),
+    ];
+
+    // Gradient string
+    const gradient = `linear-gradient(to bottom, ${
+        color.rgb
+    }, rgba(${darkened.join(",")}, 0.4))`;
     const isAlbumExplicit = album.tracks.items.some((t, _) => t.explicit);
 
     return (
@@ -37,17 +49,18 @@ export default async function AlbumIdPage({
             <header
                 className="py-6 px-4 @3xl:px-6 md:rounded-xl"
                 style={{
-                    background: `linear-gradient(to top, rgba(${darkVibrant}, 0.5), rgb(${darkVibrant}))`,
+                    background: gradient,
                 }}
             >
                 <div className="max-w-6xl w-full mx-auto flex flex-col gap-6 @3xl:grid @3xl:grid-cols-[256px_1fr] items-center @3xl:items-end">
-                    <div className="w-80 @3xl:w-auto relative aspect-square shadow-lg rounded-md @3xl:shadow-2xl overflow-hidden bg-secondary">
+                    <div className="w-80 @3xl:w-auto relative aspect-square shadow-md @3xl:shadow-2xl rounded-md overflow-hidden bg-secondary">
                         <Image
                             src={album.images[0].url}
                             alt={`${album.name} Album Cover`}
                             fill
                             priority
                         />
+                        <div className="h-full w-full absolute top-0 left-0 rounded-md inset-shadow-media"></div>
                     </div>
 
                     <div className="space-y-4 @3xl:space-y-8">
@@ -107,7 +120,9 @@ export default async function AlbumIdPage({
                         <div className="w-full mx-auto @3xl:mx-0">
                             <Button
                                 className="w-full @3xl:w-auto"
-                                variant="mediaOption"
+                                variant={
+                                    color.isDark ? "default" : "mediaOption"
+                                }
                                 size={"lg"}
                             >
                                 <FaSpotify />

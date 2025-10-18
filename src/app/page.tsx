@@ -10,11 +10,10 @@ export default async function Home() {
     try {
         user = await currentUser();
     } catch (err: any) {
-        // If Clerk says "Not Found" (account deleted), redirect them
         if (err?.status === 404 || err?.message?.includes("Not Found")) {
             redirect("/sign-up");
         }
-        throw err; // rethrow anything else
+        throw err;
     }
 
     return user ? (
