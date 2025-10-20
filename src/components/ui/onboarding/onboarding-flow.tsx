@@ -6,7 +6,7 @@ import {
     addFavoriteArtistsFromOnboarding,
     completeOnboarding,
     skipOnboarding,
-} from "@/app/onboarding/_actions";
+} from "@/app/(public)/onboarding/_actions";
 import BioStep, { BioStepHandle } from "./bio-step";
 import IntroStep, { IntroStepHandle } from "./intro-step";
 import { AnimatePresence } from "motion/react";

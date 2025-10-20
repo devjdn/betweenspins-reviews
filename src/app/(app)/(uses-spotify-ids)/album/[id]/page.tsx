@@ -8,11 +8,12 @@ import Link from "next/link";
 import { getAverageColor } from "fast-average-color-node";
 import { FaSpotify } from "react-icons/fa";
 import { fetchQuery } from "convex/nextjs";
-import { api } from "../../../../../convex/_generated/api";
+import { api } from "../../../../../../convex/_generated/api";
 import Review from "@/components/ui/albums/review";
 import AlbumReviews from "@/components/ui/albums/album-reviews";
 import { currentUser } from "@clerk/nextjs/server";
 import { MdExplicit } from "react-icons/md";
+import { notFound } from "next/navigation";
 
 export default async function AlbumIdPage({
     params,
@@ -22,8 +23,16 @@ export default async function AlbumIdPage({
     const { id } = await params;
     const user = await currentUser();
 
-    const [album, reviews, rating] = await Promise.all([
-        SpotifyAPI.getAlbum(id),
+    let album;
+    try {
+        album = await SpotifyAPI.getAlbum(id);
+        if (!album || !album.id) throw new Error("Invalid album");
+    } catch (err) {
+        notFound();
+    }
+
+    // Fetch reviews & ratings concurrently
+    const [reviews, rating] = await Promise.all([
         fetchQuery(api.reviews.getReviewsByAlbum, { spotifyAlbumId: id }),
         fetchQuery(api.albumRatings.getAlbumRating, { spotifyAlbumId: id }),
     ]);

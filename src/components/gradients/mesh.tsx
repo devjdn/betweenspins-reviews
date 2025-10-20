@@ -100,7 +100,7 @@ void main(){
 
 export default function Background() {
     return (
-        <div className="fixed h-screen inset-0 -z-10">
+        <div className="absolute w-full inset-0 -z-10">
             <Canvas>
                 <GradientBackground />
             </Canvas>

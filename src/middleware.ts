@@ -2,7 +2,11 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 // Routes that should only be accessible to non-signed-in users
-const isAuthOnlyRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
+const isSignedOutOnly = createRouteMatcher([
+    "/",
+    "/sign-in(.*)",
+    "/sign-up(.*)",
+]);
 
 // Routes that should only be accessible to signed-in users
 const isProtectedRoute = createRouteMatcher([
@@ -12,10 +16,12 @@ const isProtectedRoute = createRouteMatcher([
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
     const { userId, sessionClaims } = await auth();
+    const onboardingStatus =
+        sessionClaims?.metadata.onboardingStatus ?? "not_started";
 
-    // If user is signed in and trying to access auth pages, redirect to home
-    if (userId && isAuthOnlyRoute(req)) {
-        return NextResponse.redirect(new URL("/", req.url));
+    // If user is signed in and trying to access signed out pages, redirect to feed
+    if (userId && isSignedOutOnly(req)) {
+        return NextResponse.redirect(new URL("/feed", req.url));
     }
 
     // If user is not signed in and trying to access protected routes, redirect to sign-in
@@ -27,11 +33,10 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     // Redirect them to the /onboarding route to complete onboarding
     if (
         userId &&
-        sessionClaims?.metadata?.onboardingStatus === "not_started" &&
-        !isAuthOnlyRoute(req)
+        onboardingStatus === "not_started" &&
+        !req.nextUrl.pathname.startsWith("/onboarding")
     ) {
-        const onboardingUrl = new URL("/onboarding", req.url);
-        return NextResponse.redirect(onboardingUrl);
+        return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 
     // Allow all other requests to proceed

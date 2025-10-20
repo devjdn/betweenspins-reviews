@@ -40,7 +40,16 @@ export default function Sidebar({ clerkUserId }: { clerkUserId?: string }) {
                     </Button>
                 ))}
             </div>
-            {clerkUserId && <FavouriteArtists clerkUserId={clerkUserId} />}
+            {clerkUserId && (
+                <>
+                    <FavouriteArtists clerkUserId={clerkUserId} />{" "}
+                    <div className="flex-1">
+                        <p className="pl-4 mb-2 font-medium text-xs text-muted-foreground">
+                            Recent Reviews
+                        </p>
+                    </div>
+                </>
+            )}
         </aside>
     );
 }

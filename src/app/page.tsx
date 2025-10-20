@@ -1,36 +1,10 @@
 import Background from "@/components/gradients/mesh";
 import { Button } from "@/components/ui/button";
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export default async function Home() {
-    let user = null;
-
-    try {
-        user = await currentUser();
-    } catch (err: any) {
-        if (err?.status === 404 || err?.message?.includes("Not Found")) {
-            redirect("/sign-up");
-        }
-        throw err;
-    }
-
-    return user ? (
-        <div className="space-y-16 pt-24 md:pt-32 px-4 md:px-8">
-            <section>
-                <div className="space-y-4 text-center">
-                    <h1 className="font-sans font-semibold tracking-tight text-xl sm:text-4xl md:text-text-5xl">
-                        <span className="text-foreground/80">
-                            Welcome back,
-                        </span>{" "}
-                        {user.username}.
-                    </h1>
-                </div>
-            </section>
-        </div>
-    ) : (
-        <div className="space-y-16 pt-24 md:pt-32 px-4 md:px-8">
+    return (
+        <div className="space-y-16 pt-24 md:pt-32 px-4 md:px-8 flex-1">
             <section className="flex flex-col items-center gap-6">
                 <div className="space-y-4 text-center mx-auto">
                     <h1 className="font-serif text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl">

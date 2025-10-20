@@ -49,7 +49,6 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const user = await currentUser();
     return (
         <ClerkProvider
             appearance={{
@@ -63,14 +62,7 @@ export default async function RootLayout({
                     <ConvexClientProvider>
                         <ReactQueryProvider>
                             <Header />
-
-                            <main className="flex flex-col md:grid md:grid-cols-[256px_1fr] flex-1 md:pb-6 md:px-6 md:space-x-6 overflow-hidden relative">
-                                <Sidebar clerkUserId={user?.id} />
-                                <div className="overflow-y-scroll flex flex-col flex-1 space-y-12 md:rounded-xl">
-                                    <div className="flex-1">{children}</div>
-                                    <Footer />
-                                </div>
-                            </main>
+                            {children}
                         </ReactQueryProvider>
                     </ConvexClientProvider>
                 </body>
