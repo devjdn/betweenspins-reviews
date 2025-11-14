@@ -1,8 +1,8 @@
 export default function Loading() {
     return (
         <div className="@container space-y-4 w-full animate-pulse">
-            <header className="pb-6 pt-12 px-4 @3xl:px-6 md:rounded-xl bg-muted">
-                <div className="max-w-6xl w-full mx-auto flex flex-col gap-6 @3xl:grid @3xl:grid-cols-[256px_1fr] items-center @3xl:items-end">
+            <header className="py-6 px-4 @3xl:px-6 md:rounded-xl bg-muted">
+                <div className="flex flex-col gap-6 @3xl:grid @3xl:grid-cols-[256px_1fr] items-center @3xl:items-end">
                     {/* Album image placeholder */}
                     <div className="w-80 @3xl:w-auto relative aspect-square rounded-md overflow-hidden bg-secondary shadow-md @3xl:shadow-2xl" />
 
@@ -35,7 +35,7 @@ export default function Loading() {
 
             {/* Tabs skeleton */}
             <section className="px-4 md:px-6">
-                <div className="max-w-6xl mx-auto w-full">
+                <div className="">
                     <div className="flex gap-2 mb-4">
                         <div className="h-8 bg-secondary/40 rounded-full w-20" />
                         <div className="h-8 bg-secondary/40 rounded-full w-24" />

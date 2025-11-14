@@ -3,6 +3,7 @@ import { Hash } from "lucide-react";
 import React from "react";
 import ms from "ms";
 import { MdExplicit } from "react-icons/md";
+import { msToHoursMinutes, msToMinutesSeconds } from "@/lib/spotify/spotify";
 
 interface TracklistProps {
     tracks: SpotifyAlbumTracks;
@@ -31,17 +32,18 @@ export default function Tracklist({
         (acc, track) => acc + track.duration_ms,
         0
     );
-    const runtimeConverted = ms(runtimeMs, { long: true });
+    const runtimeConverted = msToHoursMinutes(runtimeMs);
 
     return (
         <div className="space-y-6 @container">
             {/* Header row */}
-            <div className="p-4 border-b grid grid-cols-[40px_1fr] items-center @3xl:grid-cols-[40px_1fr_1fr]">
+            <div className="p-4 border-b grid items-center gap-4 @3xl:grid-cols-[40px_1fr_80px] @6xl:grid-cols-[40px_1fr_1fr_80px]">
                 <span>
                     <Hash className="size-4" />
                 </span>
                 <span className="text-sm">Title</span>
-                <span className="text-sm hidden @3xl:inline">Artists</span>
+                <span className="text-sm hidden @6xl:inline">Artists</span>
+                <span className="text-sm hidden @3xl:inline">Duration</span>
             </div>
 
             {Object.entries(discs).map(([discNumber, tracks]) => (
@@ -56,17 +58,20 @@ export default function Tracklist({
                         {tracks.map((track) => (
                             <div
                                 key={track.id}
-                                className="grid grid-cols-[40px_1fr] @3xl:grid-cols-[40px_1fr_1fr] text-sm text-muted-foreground stroke-muted-foreground hover:stroke-foreground hover:text-foreground p-4 rounded-md @3xl:rounded-lg odd:bg-muted hover:bg-secondary"
+                                className="grid grid-cols-[40px_1fr] gap-4 @3xl:grid-cols-[40px_1fr_80px] @6xl:grid-cols-[40px_1fr_1fr_80px] text-sm text-muted-foreground stroke-muted-foreground hover:stroke-foreground hover:text-foreground p-4 rounded-md @3xl:rounded-lg odd:bg-muted hover:bg-secondary"
                             >
                                 <span>{track.track_number}</span>
                                 <span className="inline-flex items-center gap-1">
                                     {track.name}{" "}
                                     {track.explicit && <MdExplicit />}
                                 </span>
-                                <span className="hidden @3xl:inline">
+                                <span className="hidden @6xl:inline">
                                     {track.artists
                                         .map((artist) => artist.name)
                                         .join(", ")}
+                                </span>
+                                <span className="hidden @3xl:inline">
+                                    {msToMinutesSeconds(track.duration_ms)}
                                 </span>
                             </div>
                         ))}

@@ -7,7 +7,7 @@ export default async function Home() {
         <div className="space-y-16 pt-24 md:pt-32 px-4 md:px-8 flex-1">
             <section className="flex flex-col items-center gap-6">
                 <div className="space-y-4 text-center mx-auto">
-                    <h1 className="font-serif text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl">
+                    <h1 className="font-semibold text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl">
                         Rate, Review, Discover.
                     </h1>
                     <p className="text-base md:text-lg tracking-tight leading-snug font-medium max-w-lg mx-auto text-muted-foreground">

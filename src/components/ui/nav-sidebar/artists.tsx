@@ -11,7 +11,6 @@ import { FavouriteArtistsSkeleton } from "./artists-skeleton";
 export function FavouriteArtists({ clerkUserId }: { clerkUserId: string }) {
     const user = useQuery(api.users.getByClerkId, { clerkUserId });
     const favoriteArtists = user?.favoriteArtists ?? [];
-
     const canFetchSpotify = !!user && favoriteArtists.length > 0;
 
     const {
@@ -29,6 +28,7 @@ export function FavouriteArtists({ clerkUserId }: { clerkUserId: string }) {
         },
         enabled: canFetchSpotify,
         staleTime: 1000 * 60 * 10,
+        placeholderData: (prev) => prev,
     });
 
     const showSkeleton = isLoading || isFetching || !spotifyArtists;

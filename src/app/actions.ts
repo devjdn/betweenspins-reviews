@@ -1,6 +1,6 @@
 "use server";
 
-import { SpotifyAPI } from "@/lib/spotify";
+import { SpotifyAPI } from "@/lib/spotify/spotify";
 import { SpotifyArtist } from "@/types/spotify";
 import { api } from "../../convex/_generated/api";
 import { fetchMutation } from "convex/nextjs";

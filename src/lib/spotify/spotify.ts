@@ -1,15 +1,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { unstable_cache } from "next/cache";
 import {
     SpotifyArtist,
     SpotifyAlbum,
     SpotifySearchResponse,
     SpotifyAlbumTracks,
+    SpotifyTrack,
 } from "@/types/spotify";
 
 export function formatFollowers(count: number) {
     if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M`;
     if (count >= 1_000) return `${(count / 1_000).toFixed(1)}K`;
     return count.toString();
+}
+
+export function msToHoursMinutes(ms: number): string {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+    if (hours === 0) {
+        return `${minutes} minutes`;
+    }
+
+    return `${hours} ${hours > 1 ? "hours" : "hour"} ${minutes} minutes`;
+}
+
+export function msToMinutesSeconds(ms: number): string {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}`;
 }
 
 interface SpotifyTokenResponse {
@@ -71,7 +94,7 @@ export class SpotifyAPI {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
             body: "grant_type=client_credentials",
-            cache: "no-store",
+            next: { revalidate: 3600 }, // Cache token for 1 hour
         });
 
         if (!res.ok) {
@@ -83,7 +106,7 @@ export class SpotifyAPI {
         const data: SpotifyTokenResponse = await res.json();
 
         this.cachedToken = data.access_token;
-        this.tokenExpiry = now + (data.expires_in - 120) * 1000; // 2 min buffer before refreshing the token
+        this.tokenExpiry = now + (data.expires_in - 120) * 1000;
 
         return this.cachedToken;
     }
@@ -97,7 +120,7 @@ export class SpotifyAPI {
 
         let res = await fetch(url, {
             headers: { Authorization: `Bearer ${token}` },
-            cache: "no-store",
+            next: { revalidate: 300 }, // Cache for 5 minutes
         });
 
         if (res.status === 401) {
@@ -107,7 +130,7 @@ export class SpotifyAPI {
 
             res = await fetch(url, {
                 headers: { Authorization: `Bearer ${token}` },
-                cache: "no-store",
+                next: { revalidate: 300 },
             });
         }
 
@@ -160,15 +183,15 @@ export class SpotifyAPI {
             `/artists?ids=${ids}`
         );
 
-        return data.artists.filter((artist) => artist !== null); // Filter out null results
+        return data.artists.filter((artist) => artist !== null);
     }
 
     /**
-     * Get a single artist by ID
+     * Get a single artist by ID (with Next.js cache)
      */
-    static async getArtist(artistId: string): Promise<SpotifyArtist> {
+    static getArtist = async (artistId: string): Promise<SpotifyArtist> => {
         return this.makeRequest<SpotifyArtist>(`/artists/${artistId}`);
-    }
+    };
 
     /**
      * Get artist's albums
@@ -289,7 +312,6 @@ export class SpotifyAPI {
             `/search?q=${encodedQuery}&type=artist,album&limit=${limit}`
         );
 
-        // Return the Spotify response directly — no mapping or restructuring
         return data;
     }
 
@@ -335,11 +357,11 @@ export class SpotifyAPI {
     }
 
     /**
-     * Get a single album by ID
+     * Get a single album by ID (with Next.js cache)
      */
-    static async getAlbum(albumId: string): Promise<SpotifyAlbum> {
+    static getAlbum = async (albumId: string): Promise<SpotifyAlbum> => {
         return this.makeRequest<SpotifyAlbum>(`/albums/${albumId}`);
-    }
+    };
 
     /**
      * Get album's tracks

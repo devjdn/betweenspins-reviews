@@ -2,19 +2,17 @@ import type { Metadata } from "next";
 import {
     Geist_Mono,
     DM_Serif_Display,
-    Instrument_Serif,
     Instrument_Sans,
+    Source_Serif_4,
 } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/ui/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import ReactQueryProvider from "./ReactQueryProvider";
-
 import { shadcn } from "@clerk/themes";
 import ConvexClientProvider from "./ConvexClientProvider";
-import Footer from "@/components/ui/footer";
-import Sidebar from "@/components/ui/sidebar/sidebar";
-import { currentUser } from "@clerk/nextjs/server";
+import { Suspense } from "react";
+import { ThemeProvider } from "next-themes";
 
 const instrument_sans = Instrument_Sans({
     variable: "--font-instrument-sans",
@@ -27,9 +25,8 @@ const dm_serif = DM_Serif_Display({
     subsets: ["latin"],
 });
 
-const instrument_serif = Instrument_Serif({
-    weight: "400",
-    variable: "--font-instrument-serif",
+const source_serif = Source_Serif_4({
+    variable: "--font-source-serif",
     subsets: ["latin"],
 });
 
@@ -39,7 +36,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Between Spins | Rate, Review, Discover.",
+    title: {
+        template: "%s | Between Spins",
+        default: "Between Spins | Rate, Review, Discover.",
+    },
     description:
         "Between Spins is a music review and discovery platform where you can rate albums, share reviews, keep a personal music diary, and explore new artists and albums through the community.",
 };
@@ -50,23 +50,30 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <ClerkProvider
-            appearance={{
-                theme: shadcn,
-            }}
-        >
-            <html lang="en" suppressHydrationWarning>
-                <body
-                    className={`${instrument_sans.variable} ${dm_serif.variable} ${instrument_serif.variable} ${geistMono.variable} antialiased flex flex-col h-dvh overflow-hidden`}
-                >
-                    <ConvexClientProvider>
-                        <ReactQueryProvider>
-                            <Header />
-                            {children}
-                        </ReactQueryProvider>
-                    </ConvexClientProvider>
-                </body>
-            </html>
-        </ClerkProvider>
+        <Suspense>
+            <ClerkProvider
+                appearance={{
+                    theme: shadcn,
+                }}
+            >
+                <html lang="en" suppressHydrationWarning>
+                    <body
+                        className={`${instrument_sans.variable} ${dm_serif.variable} ${source_serif.variable} ${geistMono.variable} antialiased flex flex-col overscroll-auto md:h-svh`}
+                    >
+                        <ConvexClientProvider>
+                            <ReactQueryProvider>
+                                <ThemeProvider
+                                    attribute={"class"}
+                                    defaultTheme="dark"
+                                >
+                                    <Header />
+                                    {children}
+                                </ThemeProvider>
+                            </ReactQueryProvider>
+                        </ConvexClientProvider>
+                    </body>
+                </html>
+            </ClerkProvider>
+        </Suspense>
     );
 }

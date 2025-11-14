@@ -7,7 +7,7 @@ import { Search, UserRound, X } from "lucide-react";
 import { motion } from "motion/react";
 import StepHeader from "./step-header";
 import { useDebounce } from "@/hooks/use-debounce";
-import { formatFollowers } from "@/lib/spotify";
+import { formatFollowers } from "@/lib/spotify/spotify";
 import { searchSpotifyArtists, SimplifiedArtist } from "@/app/actions";
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "../badge";

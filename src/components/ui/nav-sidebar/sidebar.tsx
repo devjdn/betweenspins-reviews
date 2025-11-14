@@ -5,22 +5,22 @@ import {
     Star,
     Mic2,
     Library,
-    Settings2,
     Compass,
-    Turntable,
+    LayoutGrid,
 } from "lucide-react";
 import { FavouriteArtists } from "./artists";
 
 export default function Sidebar({ clerkUserId }: { clerkUserId?: string }) {
     const links = [
+        { name: "Feed", href: "/feed", icon: LayoutGrid },
         { name: "Reviews", href: "/reviews", icon: MessageCircle },
         { name: "Ratings", href: "/ratings", icon: Star },
         { name: "Albums", href: "/albums", icon: Library },
         { name: "Artists", href: "/artists", icon: Mic2 },
-        { name: "Discover", href: "/discover", icon: Turntable },
+        { name: "Discover", href: "/discover", icon: Compass },
     ];
     return (
-        <aside className="hidden md:flex md:flex-col md:gap-3 *:px-3 *:pt-5 *:pb-3 *:rounded-xl *:bg-muted *:shrink">
+        <aside className="hidden md:flex md:flex-col md:gap-3 *:px-3 pt-6 *:pb-3 rounded-xl bg-muted *:shrink">
             <div className="flex flex-col w-full">
                 <p className="pl-4 mb-2 font-medium text-xs text-muted-foreground">
                     Explore
@@ -43,11 +43,6 @@ export default function Sidebar({ clerkUserId }: { clerkUserId?: string }) {
             {clerkUserId && (
                 <>
                     <FavouriteArtists clerkUserId={clerkUserId} />{" "}
-                    <div className="flex-1">
-                        <p className="pl-4 mb-2 font-medium text-xs text-muted-foreground">
-                            Recent Reviews
-                        </p>
-                    </div>
                 </>
             )}
         </aside>

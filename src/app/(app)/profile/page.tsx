@@ -3,7 +3,7 @@ import { Music2, Pencil } from "lucide-react";
 import Image from "next/image";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/../convex/_generated/api";
-import { formatFollowers, SpotifyAPI } from "@/lib/spotify";
+import { formatFollowers, SpotifyAPI } from "@/lib/spotify/spotify";
 import { SpotifyArtist } from "@/types/spotify";
 import { Button } from "@/components/ui/button";
 

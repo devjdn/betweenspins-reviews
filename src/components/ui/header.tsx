@@ -25,7 +25,7 @@ export default function Header() {
     return (
         <header
             className={clsx(
-                "sticky top-0 w-full z-10 h-14 flex md:grid md:grid-cols-[32px_1fr_32px] lg:grid-cols-[150px_1fr_150px] md:gap-6 lg:gap-12 items-center justify-between px-4 md:px-6 md:pl-8 transition-colors duration-300"
+                "sticky top-0 bg-background w-full z-10 h-14 flex md:grid md:grid-cols-[32px_1fr_32px] lg:grid-cols-[150px_1fr_150px] md:gap-6 lg:gap-12 items-center justify-between px-4 md:px-6 md:pl-8 transition-colors duration-300"
             )}
         >
             <Link href={"/"}>

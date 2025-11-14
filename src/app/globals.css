@@ -1,11 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --font-sans: var(--font-instrument-sans);
-    --font-serif: var(--font-dm-serif);
+    --font-serif: var(--font-source-serif);
     --font-brand: var(--font-instrument-serif);
     --font-mono: var(--font-geist-mono);
     --color-sidebar-ring: var(--sidebar-ring);
@@ -46,6 +48,56 @@
 
 :root {
     --radius: 0.625rem;
+
+    /* Base */
+    --background: oklch(0.97 0.02 70); /* Soft morning peach off-white */
+    --foreground: oklch(0.3 0.045 70); /* Warm cocoa/ink text */
+
+    /* Surfaces */
+    --card: oklch(0.985 0.015 70); /* Slightly lifted warm surface */
+    --card-foreground: oklch(0.28 0.04 70);
+
+    --popover: oklch(0.99 0.02 70);
+    --popover-foreground: oklch(0.28 0.045 70);
+
+    /* Primary (Buttons etc.) */
+    --primary: oklch(0.7 0.12 55); /* Warm sunrise orange */
+    --primary-foreground: oklch(0.99 0.012 80); /* High contrast on primary */
+
+    /* Secondary */
+    --secondary: oklch(0.93 0.03 70); /* Soft peach mist */
+    --secondary-foreground: oklch(0.34 0.05 70);
+
+    /* Muted */
+    --muted: oklch(0.94 0.015 70);
+    --muted-foreground: oklch(0.55 0.04 60);
+
+    /* Accent (slightly richer warm note) */
+    --accent: oklch(0.88 0.045 55);
+    --accent-foreground: oklch(0.22 0.055 55);
+
+    /* Utility */
+    --destructive: oklch(0.63 0.22 22); /* Soft red – unchanged */
+    --destructive-foreground: oklch(0.985 0 0);
+
+    --border: oklch(0.85 0.015 70 / 45%);
+    --input: oklch(0.92 0.02 70);
+    --ring: oklch(0.72 0.08 55); /* Warm outline glow */
+
+    /* Charts (warm sunrise palette) */
+    --chart-1: oklch(0.68 0.16 55); /* Peach orange */
+    --chart-2: oklch(0.72 0.13 95); /* Warm yellow */
+    --chart-3: oklch(0.62 0.17 30); /* Terracotta */
+    --chart-4: oklch(0.58 0.18 340); /* Complementing berry */
+    --chart-5: oklch(0.7 0.16 150); /* Soft sage to balance warmth */
+
+    --inset-shadow-media: 0 1px 0 rgba(0, 0, 0, 0.04) inset,
+        0 -1px 0 rgba(0, 0, 0, 0.04) inset, 1px 0 0 rgba(0, 0, 0, 0.04) inset,
+        -1px 0 0 rgba(0, 0, 0, 0.04);
+}
+
+.dark {
+    --radius: 0.625rem;
     --background: oklch(0.141 0.005 285.823);
     --foreground: oklch(0.985 0 0);
     --card: oklch(0.21 0.006 285.885);
@@ -81,5 +133,14 @@
     }
     body {
         @apply font-sans bg-background text-foreground selection:bg-primary/90 selection:text-primary-foreground;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
     }
 }

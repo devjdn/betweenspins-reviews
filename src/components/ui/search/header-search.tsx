@@ -145,7 +145,7 @@ export default function HeaderSearch() {
                                     <Link
                                         key={album.id}
                                         href={`/album/${album.id}`}
-                                        className="flex items-center gap-3 p-2 rounded-2xl hover:bg-muted/50 transition-colors"
+                                        className="flex items-center gap-3 p-2 rounded-2xl hover:bg-accent transition-colors"
                                         onClick={() => setIsOpen(false)}
                                     >
                                         {album.images?.[1]?.url && (
