@@ -9,6 +9,7 @@ import {
     LayoutGrid,
 } from "lucide-react";
 import { FavouriteArtists } from "./artists";
+import ThemeSwitcher from "../theme-switcher";
 
 export default function Sidebar({ clerkUserId }: { clerkUserId?: string }) {
     const links = [
@@ -45,6 +46,7 @@ export default function Sidebar({ clerkUserId }: { clerkUserId?: string }) {
                     <FavouriteArtists clerkUserId={clerkUserId} />{" "}
                 </>
             )}
+            <ThemeSwitcher />
         </aside>
     );
 }
