@@ -1,4 +1,4 @@
-import Background from "@/components/gradients/mesh";
+import Background from "@/components/shaders/global-shader";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

@@ -85,7 +85,7 @@ export default function HeaderSearch() {
 
     return (
         <div ref={ref} className="relative w-full">
-            <InputGroup className="rounded-full">
+            <InputGroup className="rounded-lg">
                 <InputGroupInput
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -93,7 +93,7 @@ export default function HeaderSearch() {
                     onFocus={() => {
                         if (searchQuery.trim()) setIsOpen(true);
                     }}
-                    placeholder="Search for albums, artists, or reviews..."
+                    placeholder="Search"
                 />
                 <InputGroupAddon>
                     <SearchIcon />
@@ -119,93 +119,7 @@ export default function HeaderSearch() {
                 </InputGroupAddon>
             </InputGroup>
 
-            {isOpen && (artists.length > 0 || albums.length > 0) && (
-                <div className="absolute top-full left-0 w-full mt-2 bg-background border rounded-3xl shadow-lg z-50 p-2">
-                    <Tabs defaultValue="albums" className="w-full">
-                        <TabsList className="grid grid-cols-2 mb-2">
-                            <TabsTrigger value="albums">
-                                <Library />
-                                Albums
-                            </TabsTrigger>
-                            <TabsTrigger value="artists">
-                                <Music2 />
-                                Artists
-                            </TabsTrigger>
-                        </TabsList>
-
-                        {/* Albums */}
-                        <TabsContent value="albums">
-                            <div className="max-h-[400px] rounded-2xl overflow-y-auto flex flex-col gap-1">
-                                {albums.length === 0 && (
-                                    <p className="text-sm text-muted-foreground px-2">
-                                        No albums found.
-                                    </p>
-                                )}
-                                {albums.map((album: any) => (
-                                    <Link
-                                        key={album.id}
-                                        href={`/album/${album.id}`}
-                                        className="flex items-center gap-3 p-2 rounded-2xl hover:bg-accent transition-colors"
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        {album.images?.[1]?.url && (
-                                            <div className="relative size-12 rounded-lg overflow-hidden">
-                                                <Image
-                                                    src={album.images[1].url}
-                                                    alt={album.name}
-                                                    fill
-                                                    loading="lazy"
-                                                    className="object-cover object-center"
-                                                />
-                                            </div>
-                                        )}
-                                        <div className="text-sm">
-                                            <p>{album.name}</p>
-                                            <p className="text-muted-foreground">
-                                                {album.artists
-                                                    .map((a: any) => a.name)
-                                                    .join(", ")}
-                                            </p>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        </TabsContent>
-
-                        {/* Artists */}
-                        <TabsContent value="artists">
-                            <div className="max-h-[400px] overflow-y-auto flex flex-col gap-1">
-                                {artists.length === 0 && (
-                                    <p className="text-sm text-muted-foreground px-2">
-                                        No artists found.
-                                    </p>
-                                )}
-                                {artists.map((artist: any) => (
-                                    <Link
-                                        key={artist.id}
-                                        href={`/artist/${artist.id}`}
-                                        className="flex items-center gap-3 p-2 rounded-2xl hover:bg-muted/50 transition-colors"
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        {artist.images?.[1]?.url && (
-                                            <div className="relative size-12 rounded-full overflow-hidden">
-                                                <Image
-                                                    src={artist.images[1].url}
-                                                    alt={artist.name}
-                                                    fill
-                                                    loading="lazy"
-                                                    className="object-cover object-center"
-                                                />
-                                            </div>
-                                        )}
-                                        <p className="text-sm">{artist.name}</p>
-                                    </Link>
-                                ))}
-                            </div>
-                        </TabsContent>
-                    </Tabs>
-                </div>
-            )}
+            {isOpen && (artists.length > 0 || albums.length > 0) && <div></div>}
         </div>
     );
 }

@@ -2,31 +2,30 @@ import type { Metadata } from "next";
 import {
     Geist_Mono,
     DM_Serif_Display,
-    Instrument_Sans,
-    Source_Serif_4,
+    Inter,
+    Inter_Tight,
 } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/ui/header";
 import { ClerkProvider } from "@clerk/nextjs";
-import ReactQueryProvider from "./ReactQueryProvider";
+import ReactQueryProvider from "../providers/ReactQueryProvider";
 import { shadcn } from "@clerk/themes";
-import ConvexClientProvider from "./ConvexClientProvider";
+import ConvexClientProvider from "../providers/ConvexClientProvider";
 import { Suspense } from "react";
 import { ThemeProvider } from "next-themes";
 
-const instrument_sans = Instrument_Sans({
-    variable: "--font-instrument-sans",
+const inter = Inter({
+    variable: "--font-inter",
+    subsets: ["latin"],
+});
+
+const inter_tight = Inter_Tight({
+    variable: "--font-inter-tight",
     subsets: ["latin"],
 });
 
 const dm_serif = DM_Serif_Display({
     weight: "400",
     variable: "--font-dm-serif",
-    subsets: ["latin"],
-});
-
-const source_serif = Source_Serif_4({
-    variable: "--font-source-serif",
     subsets: ["latin"],
 });
 
@@ -58,7 +57,7 @@ export default async function RootLayout({
             >
                 <html lang="en" suppressHydrationWarning>
                     <body
-                        className={`${instrument_sans.variable} ${dm_serif.variable} ${source_serif.variable} ${geistMono.variable} antialiased flex flex-col overscroll-auto md:h-svh`}
+                        className={`${inter.variable} ${inter_tight.variable} ${dm_serif.variable} ${geistMono.variable} antialiased flex flex-col overscroll-auto md:h-svh`}
                     >
                         <ConvexClientProvider>
                             <ReactQueryProvider>
@@ -66,7 +65,6 @@ export default async function RootLayout({
                                     attribute={"class"}
                                     defaultTheme="dark"
                                 >
-                                    <Header />
                                     {children}
                                 </ThemeProvider>
                             </ReactQueryProvider>

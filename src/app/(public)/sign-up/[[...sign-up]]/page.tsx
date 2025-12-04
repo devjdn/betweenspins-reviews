@@ -1,10 +1,8 @@
 import { SignUp } from "@clerk/nextjs";
-import ShaderBackground from "@/components/gradients/mesh";
 
-export default function Page() {
+export default async function Page() {
     return (
         <div className="grid place-items-center pt-16">
-            <ShaderBackground />
             <SignUp />
         </div>
     );

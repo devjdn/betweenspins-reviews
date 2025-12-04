@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 export default async function RootLayout({
     children,
@@ -12,5 +13,5 @@ export default async function RootLayout({
         redirect("/");
     }
 
-    return <>{children}</>;
+    return <Suspense>{children}</Suspense>;
 }
