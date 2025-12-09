@@ -1,22 +1,22 @@
-import { SpotifyAlbum } from "@/types/spotify";
 import Image from "next/image";
+import { SpotifyArtist } from "@/types/spotify";
 
-export type CoverProps = {
-    albumCover: SpotifyAlbum["images"][0]["url"];
-    albumName: SpotifyAlbum["name"];
+export type ArtistCoverProps = {
+    artistCover: SpotifyArtist["images"][0]["url"];
+    artistName: SpotifyArtist["name"];
     shadowColor?: string;
     priority?: boolean;
 };
 
-export default function AlbumCover({
-    albumCover,
-    albumName,
+export default function ArtistCover({
+    artistCover,
+    artistName,
     shadowColor,
     priority = false,
-}: CoverProps) {
+}: ArtistCoverProps) {
     return (
         <div
-            className="w-80 mx-auto @3xl:mx-0 @3xl:w-auto relative aspect-square rounded-lg overflow-hidden bg-secondary"
+            className="w-80 mx-auto @3xl:mx-0 @3xl:w-auto relative aspect-square rounded-full overflow-hidden bg-secondary"
             style={{
                 boxShadow: shadowColor
                     ? `0 25px 70px ${shadowColor}`
@@ -24,14 +24,12 @@ export default function AlbumCover({
             }}
         >
             <Image
-                src={albumCover}
-                alt={`${albumName} Album Cover`}
+                src={artistCover}
+                alt={`${artistName} portrait`}
                 fill
                 priority={priority}
                 sizes="(min-width: 1536px) 320px, 80vw"
-                className="object-cover"
-                loading="eager"
-                fetchPriority="high"
+                className="object-center object-cover"
             />
 
             <div className="absolute inset-0 pointer-events-none rounded-md ring-[1px] shadow-[inset_0_0_30px_rgba(0,0,0,0.4)]" />

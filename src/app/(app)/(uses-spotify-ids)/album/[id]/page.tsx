@@ -1,20 +1,9 @@
-import Tracklist from "@/components/ui/albums/tracklist";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SpotifyAPI } from "@/lib/spotify/spotify";
+import { msToHoursMinutes, SpotifyAPI } from "@/lib/spotify/spotify";
 import { getAverageColor } from "fast-average-color-node";
-import { FaSpotify } from "react-icons/fa";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "../../../../../../convex/_generated/api";
-import Review from "@/components/ui/albums/review";
-import AlbumReviews from "@/components/ui/albums/album-reviews";
-import { currentUser } from "@clerk/nextjs/server";
-import { MdExplicit } from "react-icons/md";
 import { notFound } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { SpotifyAlbum } from "@/types/spotify";
-import clsx from "clsx";
 import { Separator } from "@/components/ui/separator";
 import { AlbumHeader } from "@/components/ui/album/header";
 import ShaderColorUpdater from "@/components/shaders/shader-updater";
@@ -38,7 +27,6 @@ export async function generateMetadata(
 
 export default async function AlbumIdPage({ params }: Props) {
     const { id } = await params;
-    const user = await currentUser();
 
     let album;
     try {
@@ -56,6 +44,11 @@ export default async function AlbumIdPage({ params }: Props) {
         getAverageColor(album.images[0].url),
     ]);
     const isAlbumExplicit = album.tracks.items.some((t, _) => t.explicit);
+    const runtimeMs = album.tracks.items.reduce(
+        (acc, track) => acc + track.duration_ms,
+        0
+    );
+    const runtimeConverted = msToHoursMinutes(runtimeMs);
 
     return (
         <>
@@ -74,11 +67,7 @@ export default async function AlbumIdPage({ params }: Props) {
                 />
                 <Separator />
             </div>
-            <ShaderColorUpdater
-                color1={color.hex}
-                color2={color.hex}
-                color3={color.hex}
-            />
+            <ShaderColorUpdater color={color.rgb} />
         </>
     );
 }

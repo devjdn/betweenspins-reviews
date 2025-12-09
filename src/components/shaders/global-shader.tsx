@@ -3,40 +3,52 @@
 import * as THREE from "three";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useMemo, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { useShaderStore } from "@/stores/shaderStore";
 
 function GradientShader() {
     const materialRef = useRef<THREE.ShaderMaterial>(null);
     const startTimeRef = useRef<number | null>(null);
+    const { resolvedTheme } = useTheme();
 
-    // Subcribing colors to the zustand store
-    const colors = useShaderStore((s) => s.colors);
-    const { color1, color2, color3 } = colors;
+    // Subscribe to color from the zustand store
+    const color = useShaderStore((s) => s.color);
 
-    // Create a key from colors to force remount
-    const colorKey = `${color1}-${color2}-${color3}`;
+    // Generate color based on theme
+    const colorObject = useMemo(() => {
+        // Parse RGB
+        const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+        if (match) {
+            const r = parseInt(match[1]) / 255;
+            const g = parseInt(match[2]) / 255;
+            const b = parseInt(match[3]) / 255;
+            const threeColor = new THREE.Color(r, g, b);
 
-    // Log when Zustand values change
+            if (resolvedTheme === "light") {
+                // Convert to HSL for easier manipulation
+                const hsl = { h: 0, s: 0, l: 0 };
+                threeColor.getHSL(hsl);
+
+                // Reduce saturation significantly and increase lightness
+                hsl.s *= 0.3; // Reduce saturation to 30% of original
+                hsl.l = Math.min(0.95, hsl.l + 0.4); // Increase lightness, cap at 95%
+
+                threeColor.setHSL(hsl.h, hsl.s, hsl.l);
+            }
+
+            return threeColor;
+        }
+        // Fallback
+        return new THREE.Color(0.5, 0.5, 0.5);
+    }, [color, resolvedTheme]);
+
+    // Create a key from color and theme to force remount
+    const colorKey = `${color}-${resolvedTheme}`;
+
+    // Reset start time when color or theme changes
     useEffect(() => {
-        console.log("1. GradientShader: Zustand colors changed:", {
-            color1,
-            color2,
-            color3,
-        });
-    }, [color1, color2, color3]);
-
-    // Create new Color objects whenever colors change
-    const colorObjects = useMemo(() => {
-        console.log(
-            "2. GradientShader: useMemo creating new THREE.Color objects:",
-            { color1, color2, color3 }
-        );
-        return {
-            color1: new THREE.Color(color1),
-            color2: new THREE.Color(color2),
-            color3: new THREE.Color(color3),
-        };
-    }, [color1, color2, color3]);
+        startTimeRef.current = null;
+    }, [colorKey]);
 
     useFrame(({ clock }) => {
         if (!materialRef.current) return;
@@ -47,7 +59,9 @@ function GradientShader() {
         }
 
         const t = clock.getElapsedTime() - startTimeRef.current;
-        const fade = Math.min(1, t / 0.5); // 0.5s fade in (faster than before)
+        const fade = Math.min(1, t / 0.5); // 0.5s fade in
+
+        // Update opacity for fade-in effect
         materialRef.current.uniforms.uOpacity.value = fade;
     });
 
@@ -59,9 +73,7 @@ function GradientShader() {
                 transparent
                 uniforms={{
                     uOpacity: { value: 0 },
-                    color1: { value: colorObjects.color1 },
-                    color2: { value: colorObjects.color2 },
-                    color3: { value: colorObjects.color3 },
+                    color1: { value: colorObject },
                 }}
                 fragmentShader={fragmentShader}
                 vertexShader={vertexShader}
@@ -95,33 +107,35 @@ void main(){
 const fragmentShader = `
 uniform float uOpacity;
 uniform vec3 color1;
-uniform vec3 color2;
-uniform vec3 color3;
 
 varying vec2 vUv;
 
 void main() {
     vec2 uv = vUv;
 
-    // Top-left corner - sharp and close to edge
-    float d1 = smoothstep(0.6, 0.0, distance(uv, vec2(-0.05, 1.05))); 
+    // Define how far down the gradient extends at different x positions
+    // Left side: extends down 0.2 units, Right side: extends down 0.4 units
+    float dropAmount = mix(0.2, 0.4, uv.x);
     
-    // Top-right corner - extends more into the page, rounded inward
-    float d2 = smoothstep(0.85, 0.0, distance(uv, vec2(1.15, 1.1))); 
+    // Add smooth easing for organic curve
+    float xEased = pow(uv.x, 0.7);
+    float curveDrop = dropAmount * (1.0 - cos(xEased * 3.14159)) * 0.5;
     
-    // Additional top emphasis - spreads across the top
-    float d3 = smoothstep(0.5, 0.0, distance(uv, vec2(0.5, 1.15)));
-
-    // Blend the colors
-    vec3 col = 
-        d1 * color1 * 0.8 +
-        d2 * color2 * 0.75 +
-        d3 * color3 * 0.7;
-
-    // Calculate total opacity - fades to transparent in center and bottom
-    float totalAlpha = (d1 + d2 + d3) * uOpacity;
+    // Distance from top edge (1.0) adjusted by the curve
+    float distFromTop = (1.0 - uv.y) - curveDrop;
+    
+    // Much softer, more gradual fade - increased the range significantly
+    float intensity = smoothstep(0.25, -curveDrop, distFromTop);
+    
+    // Gentler fade at the very top edge
+    intensity *= smoothstep(0.5, 0.0, 1.0 - uv.y);
+    
+    // Additional soft overall fade to eliminate hard edges
+    intensity = pow(intensity, 1.3);
+    
+    vec3 col = color1 * intensity;
+    float totalAlpha = intensity * uOpacity;
 
     gl_FragColor = vec4(col, totalAlpha);
 }
-
 `;

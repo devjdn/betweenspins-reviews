@@ -1,7 +1,5 @@
 import Footer from "@/components/ui/footer";
-import AppSidebar, {
-    MobileHeader,
-} from "@/components/ui/nav-sidebar/app-sidebar";
+import AppSidebar, { MobileHeader } from "@/components/ui/sidebar/app-sidebar";
 import { currentUser } from "@clerk/nextjs/server";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import ShaderBackground from "@/components/shaders/global-shader";
@@ -20,8 +18,9 @@ export default async function AppLayout({
                 <MobileHeader />
 
                 <div className="overflow-y-scroll flex flex-col flex-1 space-y-12">
-                    <ShaderBackground />
-                    <div className="flex-1 flex px-4 py-8 md:px-8">
+                    <div className="flex-1 flex px-4 py-8 md:px-8 relative">
+                        <ShaderBackground />
+
                         {children}
                     </div>
                     <Footer />

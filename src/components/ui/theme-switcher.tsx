@@ -14,6 +14,7 @@ export default function ThemeSwitcher() {
             onClick={() =>
                 setTheme(resolvedTheme === "dark" ? "light" : "dark")
             }
+            name="Theme Toggle"
         >
             <Sun className="dark:hidden" />
             <Moon className="hidden dark:block" />
