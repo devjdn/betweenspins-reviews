@@ -15,6 +15,15 @@ const nextConfig: NextConfig = {
                 protocol: "https",
                 hostname: "i.scdn.co",
             },
+            {
+                protocol: "https",
+                hostname: "coverartarchive.org"
+            },
+            {
+                protocol: "https",
+                hostname: "**.archive.org",
+                pathname: "/**",
+            },
         ],
     },
     reactCompiler: true,

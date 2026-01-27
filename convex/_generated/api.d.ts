@@ -8,7 +8,10 @@
  * @module
  */
 
-import type * as albumRatings from "../albumRatings.js";
+import type * as albumReviews from "../albumReviews.js";
+import type * as albums_actions from "../albums/actions.js";
+import type * as albums_mutations from "../albums/mutations.js";
+import type * as albums_queries from "../albums/queries.js";
 import type * as reviews from "../reviews.js";
 import type * as users from "../users.js";
 
@@ -19,7 +22,10 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  albumRatings: typeof albumRatings;
+  albumReviews: typeof albumReviews;
+  "albums/actions": typeof albums_actions;
+  "albums/mutations": typeof albums_mutations;
+  "albums/queries": typeof albums_queries;
   reviews: typeof reviews;
   users: typeof users;
 }>;

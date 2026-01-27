@@ -7,30 +7,18 @@ import { clerkClient } from "@clerk/nextjs/server";
 export const addBioFromOnboarding = async (
     clerkUserId: string,
     bio: string
-) => {
+): Promise<{ success: true } | { success: false; error: string }> => {
     try {
-        return await fetchMutation(api.users.updateBio, {
-            clerkUserId: clerkUserId,
-            bio: bio,
+        await fetchMutation(api.users.updateBio, {
+            clerkUserId,
+            bio,
         });
+        return { success: true };
     } catch (error) {
         console.error("Failed to update bio:", error);
-        throw error;
-    }
-};
-
-export const addFavoriteArtistsFromOnboarding = async (
-    clerkUserId: string,
-    favoriteArtists: { artist_id: string; name: string }[]
-) => {
-    try {
-        return await fetchMutation(api.users.updateFavoriteArtists, {
-            clerkUserId,
-            favoriteArtists,
-        });
-    } catch (error) {
-        console.error("Failed to update favorite artists:", error);
-        throw error;
+        const message =
+            error instanceof Error ? error.message : "Failed to save bio";
+        return { success: false, error: message };
     }
 };
 

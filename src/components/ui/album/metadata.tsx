@@ -15,13 +15,13 @@ export default function AlbumMetadata({
 }: AlbumMetaProps) {
     return (
         <div className="space-y-1 font-display text-center @3xl:text-left">
-            <span className="inline-flex items-baseline flex-wrap font-semibold text-xl @3xl:text-3xl text-balance supports-[text-wrap:pretty]:text-pretty">
-                <span>{albumName}</span>
-                <span className="inline ml-1 translate-y-[2px]">
-                    {isExplicit && (
+            <span className="inline-block font-semibold text-xl @3xl:text-3xl text-balance supports-[text-wrap:pretty]:text-pretty">
+                {albumName}
+                {isExplicit && (
+                    <span className="inline-flex items-center ml-1 translate-y-[3px] @3xl:translate-y-[4px]">
                         <MdExplicit className="@3xl:size-7 text-destructive" />
-                    )}
-                </span>
+                    </span>
+                )}
             </span>
 
             <div className="font-normal @3xl:font-medium @3xl:text-2xl">

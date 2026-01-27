@@ -5,14 +5,6 @@ export const create = mutation({
     args: {
         clerkUserId: v.string(),
         bio: v.optional(v.string()),
-        favoriteArtists: v.optional(
-            v.array(
-                v.object({
-                    artist_id: v.string(),
-                    name: v.string(),
-                })
-            )
-        ),
     },
     handler: async (ctx, args) => {
         const existing = await ctx.db
@@ -27,7 +19,6 @@ export const create = mutation({
         return await ctx.db.insert("users", {
             clerkUserId: args.clerkUserId,
             bio: args.bio ?? "",
-            favoriteArtists: args.favoriteArtists ?? [],
         });
     },
 });
@@ -62,7 +53,6 @@ export const getByClerkId = query({
 
         return {
             bio: user.bio ?? "",
-            favoriteArtists: user.favoriteArtists ?? [],
             clerkUserId: user.clerkUserId,
         };
     },
@@ -81,44 +71,13 @@ export const updateBio = mutation({
             )
             .unique();
 
-        if (!user) {
-            throw new Error("User not found");
+        if (user) {
+            await ctx.db.patch(user._id, { bio });
+        } else {
+            await ctx.db.insert("users", { clerkUserId, bio });
         }
-
-        await ctx.db.patch(user._id, {
-            bio,
-        });
 
         return { success: true };
     },
 });
 
-export const updateFavoriteArtists = mutation({
-    args: {
-        clerkUserId: v.string(),
-        favoriteArtists: v.array(
-            v.object({
-                artist_id: v.string(),
-                name: v.string(),
-            })
-        ),
-    },
-    handler: async (ctx, { clerkUserId, favoriteArtists }) => {
-        const user = await ctx.db
-            .query("users")
-            .withIndex("by_clerkUserId", (q) =>
-                q.eq("clerkUserId", clerkUserId)
-            )
-            .unique();
-
-        if (!user) {
-            throw new Error("User not found");
-        }
-
-        await ctx.db.patch(user._id, {
-            favoriteArtists,
-        });
-
-        return { success: true };
-    },
-});

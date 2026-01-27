@@ -34,7 +34,7 @@ export default function AlbumCover({
                 fetchPriority="high"
             />
 
-            <div className="absolute inset-0 pointer-events-none rounded-md ring-[1px] shadow-[inset_0_0_30px_rgba(0,0,0,0.4)]" />
+            <div className="absolute inset-0 pointer-events-none rounded-lg inset-shadow-media" />
         </div>
     );
 }

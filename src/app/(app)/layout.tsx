@@ -2,7 +2,6 @@ import Footer from "@/components/ui/footer";
 import AppSidebar, { MobileHeader } from "@/components/ui/sidebar/app-sidebar";
 import { currentUser } from "@clerk/nextjs/server";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import ShaderBackground from "@/components/shaders/global-shader";
 
 export default async function AppLayout({
     children,
@@ -13,16 +12,12 @@ export default async function AppLayout({
 
     return (
         <SidebarProvider>
-            <main className="flex flex-col md:grid md:grid-cols-[256px_1fr_auto] flex-1">
+            <main className="flex flex-col md:grid md:grid-cols-[256px_1fr_auto] flex-1 bg-background/40 backdrop-blur-md">
                 <AppSidebar clerkUserId={user?.id} />
                 <MobileHeader />
 
-                <div className="overflow-y-scroll flex flex-col flex-1 space-y-12">
-                    <div className="flex-1 flex px-4 py-8 md:px-8 relative">
-                        <ShaderBackground />
-
-                        {children}
-                    </div>
+                <div className="overflow-y-scroll flex flex-col flex-1 space-y-12 relative">
+                    {children}
                     <Footer />
                 </div>
             </main>

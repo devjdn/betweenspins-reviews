@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
                 await fetchMutation(api.users.create, {
                     clerkUserId: data.id,
                     bio: "",
-                    favoriteArtists: [],
                 });
 
                 await client.users.updateUser(data.id, {

@@ -23,11 +23,11 @@ export default function Footer() {
                     <span className="text-sm text-muted-foreground">
                         All music data provided by{" "}
                         <Link
-                            href={"https://spotify.com"}
+                            href={"https://musicbrainz.org"}
                             className="hover:underline"
                             target="_blank"
                         >
-                            Spotify
+                            MusicBrainz
                         </Link>
                         .
                     </span>

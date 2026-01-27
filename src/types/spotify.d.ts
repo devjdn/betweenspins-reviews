@@ -57,24 +57,74 @@ export interface SpotifyAlbum {
     };
 }
 
+export interface SearchArtist {
+    id: string;
+    name: string;
+    image: { url: string; width: number; height: number } | null;
+    followers: number;
+    genres: string[];
+    popularity: number;
+}
+
+export interface SearchAlbum {
+    id: string;
+    name: string;
+    image: { url: string; width: number; height: number };
+    release_date: string;
+    total_tracks: number;
+    album_type: "album" | "single" | "compilation";
+    artists: { id: string; name: string }[];
+}
+
+export interface SimplifiedAlbum {
+    album_type: "album" | "single" | "compilation";
+    total_tracks: number;
+    available_markets: string[];
+    external_urls: {
+        spotify: string;
+    };
+    href: string;
+    id: string;
+    images: {
+        url: string;
+        height: number;
+        width: number;
+    }[];
+    name: string;
+    release_date: string;
+    release_date_precision: "year" | "month" | "day";
+    type: "album";
+    uri: string;
+    artists: {
+        id: string;
+        name: string;
+        type: "artist";
+        uri: string;
+        href: string;
+        external_urls: {
+            spotify: string;
+        };
+    }[];
+}
+
 export interface SpotifySearchResponse {
     artists?: {
-        href: string;
         items: SpotifyArtist[];
         limit: number;
-        next: string | null;
         offset: number;
-        previous: string | null;
         total: number;
+        next: string | null;
+        previous: string | null;
+        href: string;
     };
     albums?: {
-        href: string;
-        items: SpotifyAlbum[];
+        items: SimplifiedAlbum[];
         limit: number;
-        next: string | null;
         offset: number;
-        previous: string | null;
         total: number;
+        next: string | null;
+        previous: string | null;
+        href: string;
     };
 }
 

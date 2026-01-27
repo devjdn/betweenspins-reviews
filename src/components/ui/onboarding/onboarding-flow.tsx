@@ -3,21 +3,19 @@
 import React from "react";
 import {
     addBioFromOnboarding,
-    addFavoriteArtistsFromOnboarding,
     completeOnboarding,
     skipOnboarding,
 } from "@/app/(public)/onboarding/_actions";
 import BioStep, { BioStepHandle } from "./bio-step";
 import IntroStep, { IntroStepHandle } from "./intro-step";
 import { AnimatePresence } from "motion/react";
-import ArtistStep, { ArtistStepHandle } from "./artist-step";
 import EndStep, { EndStepHandle } from "./end-step";
 import { redirect, useRouter } from "next/navigation";
 import { Progress } from "../progress";
 import { Button } from "../button";
 import { FastForward, Play, Rewind, SkipForward } from "lucide-react";
 
-const ONBOARDING_STEPS = ["intro", "bio", "artists", "done"] as const;
+const ONBOARDING_STEPS = ["intro", "bio", "done"] as const;
 
 interface OnboardingFlowProps {
     clerkUserId: string;
@@ -33,7 +31,6 @@ export default function OnboardingFlow({ clerkUserId }: OnboardingFlowProps) {
 
     const introRef = React.useRef<IntroStepHandle | null>(null);
     const bioRef = React.useRef<BioStepHandle | null>(null);
-    const artistRef = React.useRef<ArtistStepHandle | null>(null);
     const endRef = React.useRef<EndStepHandle | null>(null);
 
     const nextStep = () => {
@@ -46,25 +43,15 @@ export default function OnboardingFlow({ clerkUserId }: OnboardingFlowProps) {
     const handleBioComplete = async (bio: string) => {
         setIsLoading(true);
         try {
-            await addBioFromOnboarding(clerkUserId, bio);
-            nextStep();
+            const result = await addBioFromOnboarding(clerkUserId, bio);
+            if (result.success) {
+                nextStep();
+            } else {
+                console.error("Failed to update bio:", result.error);
+                // TODO: show toast with result.error
+            }
         } catch (error) {
             console.error("Failed to update bio:", error);
-            // TODO: show toast
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleArtistsComplete = async (
-        artists: { artist_id: string; name: string }[]
-    ) => {
-        setIsLoading(true);
-        try {
-            await addFavoriteArtistsFromOnboarding(clerkUserId, artists);
-            nextStep();
-        } catch (error) {
-            console.error("Failed to update favorite artists:", error);
             // TODO: show toast
         } finally {
             setIsLoading(false);
@@ -100,7 +87,6 @@ export default function OnboardingFlow({ clerkUserId }: OnboardingFlowProps) {
     const getCurrentRef = () => {
         if (currentStep === "intro") return introRef.current;
         if (currentStep === "bio") return bioRef.current;
-        if (currentStep === "artists") return artistRef.current;
         if (currentStep === "done") return endRef.current;
         return null;
     };
@@ -129,12 +115,6 @@ export default function OnboardingFlow({ clerkUserId }: OnboardingFlowProps) {
                     <BioStep
                         ref={bioRef}
                         onComplete={handleBioComplete}
-                        onValidityChange={setCanContinue}
-                    />
-                ) : currentStep === "artists" ? (
-                    <ArtistStep
-                        ref={artistRef}
-                        onComplete={handleArtistsComplete}
                         onValidityChange={setCanContinue}
                     />
                 ) : (
@@ -177,7 +157,7 @@ export default function OnboardingFlow({ clerkUserId }: OnboardingFlowProps) {
                     )}
                 </Button>
 
-                {(currentStep === "bio" || currentStep === "artists") && (
+                {currentStep === "bio" && (
                     <Button
                         variant="secondary"
                         size="lg"

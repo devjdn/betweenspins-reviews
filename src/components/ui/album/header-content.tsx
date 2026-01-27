@@ -9,7 +9,6 @@ export default function AlbumHeaderContent({
     albumName,
     isExplicit,
     artists,
-    color,
     spotifyUrl,
 }: AlbumHeaderContentProps) {
     return (
@@ -20,7 +19,7 @@ export default function AlbumHeaderContent({
                 artists={artists}
             />
 
-            <AlbumActions color={color} spotifyUrl={spotifyUrl} />
+            <AlbumActions spotifyUrl={spotifyUrl} />
         </div>
     );
 }

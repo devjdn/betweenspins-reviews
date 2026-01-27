@@ -19,7 +19,6 @@ import {
     Compass,
     LayoutGrid,
     Library,
-    Menu,
     MessageCircle,
     Mic2,
     Search,
@@ -29,7 +28,6 @@ import {
 } from "lucide-react";
 import { BetweenSpinsLogo } from "@/components/logo";
 import { Separator } from "../separator";
-import HeaderSearch from "../search/header-search";
 import ThemeSwitcher from "../theme-switcher";
 
 /**
@@ -54,17 +52,17 @@ export default function AppSidebar({ clerkUserId }: { clerkUserId?: string }) {
             links: [
                 {
                     name: "Reviews",
-                    href: "/album/34LxHI9x14qXUOS8AWRrYD",
+                    href: "/reviews",
                     icon: MessageCircle,
                 },
                 {
                     name: "Ratings",
-                    href: "/album/1oIICL75sMuInkEhX8jj3b",
+                    href: "/ratings",
                     icon: Star,
                 },
                 {
                     name: "Albums",
-                    href: "/album/29yxKl8iktRPSLvWv2QMna",
+                    href: "/albums",
                     icon: Library,
                 },
                 { name: "Artists", href: "/artists", icon: Mic2 },
@@ -80,7 +78,7 @@ export default function AppSidebar({ clerkUserId }: { clerkUserId?: string }) {
     ];
 
     return (
-        <Sidebar side="left" variant="sidebar" collapsible="none">
+        <Sidebar side="left" variant="sidebar">
             <SidebarHeader>
                 <Link href={"/"}>
                     <div className="flex items-center gap-1">
@@ -104,12 +102,8 @@ export default function AppSidebar({ clerkUserId }: { clerkUserId?: string }) {
                                                 asChild
                                                 isActive={pathname === href}
                                             >
-                                                <Link
-                                                    prefetch
-                                                    href={href}
-                                                    className="gap-3"
-                                                >
-                                                    <Icon className="size-4 shrink-0 text-muted-foreground" />
+                                                <Link prefetch href={href}>
+                                                    <Icon />
                                                     <span className="truncate">
                                                         {name}
                                                     </span>

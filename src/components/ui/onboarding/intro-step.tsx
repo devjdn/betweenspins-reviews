@@ -43,7 +43,7 @@ const IntroStep = React.forwardRef<IntroStepHandle, IntroStepProps>(
                 <StepHeader
                     title="Make Your Profile Yours"
                     description={
-                        "Personalize your appearance on Between Spins. You can give yourself a bio, as well as pick 5 your favourite artists to appear on your profile (powered by Spotify)."
+                        "Personalize your appearance on Between Spins. You can give yourself a bio to help others get to know you."
                     }
                 />
                 <div className="flex-1" />

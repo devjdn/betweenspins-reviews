@@ -49,30 +49,28 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <Suspense>
-            <ClerkProvider
-                appearance={{
-                    theme: shadcn,
-                }}
-            >
-                <html lang="en" suppressHydrationWarning>
-                    <body
-                        className={`${inter.variable} ${inter_tight.variable} ${dm_serif.variable} ${geistMono.variable} antialiased flex flex-col overscroll-auto md:h-svh`}
-                    >
-                        <ConvexClientProvider>
-                            <ReactQueryProvider>
-                                <ThemeProvider
-                                    attribute={"class"}
-                                    defaultTheme="dark"
-                                    enableSystem
-                                >
-                                    {children}
-                                </ThemeProvider>
-                            </ReactQueryProvider>
-                        </ConvexClientProvider>
-                    </body>
-                </html>
-            </ClerkProvider>
-        </Suspense>
+        <ClerkProvider
+            appearance={{
+                theme: shadcn,
+            }}
+        >
+            <html lang="en" suppressHydrationWarning>
+                <body
+                    className={`${inter.variable} ${inter_tight.variable} ${dm_serif.variable} ${geistMono.variable} antialiased flex flex-col overscroll-auto md:h-svh`}
+                >
+                    <ConvexClientProvider>
+                        <ReactQueryProvider>
+                            <ThemeProvider
+                                attribute={"class"}
+                                defaultTheme="dark"
+                                enableSystem
+                            >
+                                {children}
+                            </ThemeProvider>
+                        </ReactQueryProvider>
+                    </ConvexClientProvider>
+                </body>
+            </html>
+        </ClerkProvider>
     );
 }
